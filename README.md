@@ -1,2 +1,3 @@
 # Android_Project_3133142
-Android Project Grifit
+Android Project 
+Griffith College - 3133142
