@@ -19,10 +19,14 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 
+// NavigationBottomBar of the App.
 @Composable
 fun BottomBar(
-    navController: NavHostController, state: MutableState<Boolean>, modifier: Modifier = Modifier
+    navController: NavHostController, // Navigation controller for managing navigation events.
+    state: MutableState<Boolean>, // Mutable state to manage some UI state changes.
+    modifier: Modifier = Modifier // Modifier for customizing the UI layout and behavior.
 ) {
+    // List of destinations to be displayed in the BottomBar.
     val screens = listOf(
         Destinations.Home,
         Destinations.Track,
@@ -30,27 +34,33 @@ fun BottomBar(
         Destinations.Profile
     )
 
+    // The actual BottomBar layout component.
     NavigationBar(
-
+        // Modifier for the NavigationBar's appearance and dimensions.
         modifier = Modifier
-            .padding(10.dp)
-            .clip(RoundedCornerShape(25)),
-        containerColor = colorResource(id = R.color.navBackground),
+            .padding(10.dp) // Adds padding around the NavigationBar.
+            .clip(RoundedCornerShape(25)), // Rounds the corners of the NavigationBar.
+        containerColor = colorResource(id = R.color.navBackground), // Sets the background color of the NavigationBar.
 
     ) {
+        // Retrieves the current back stack entry and the current route.
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
 
+        // Iterates through each screen and creates a tab for it.
         screens.forEach { screen ->
-
             NavigationBarItem(
+                // Label for the navigation item, showing the title of the screen.
                 label = {
                     Text(text = screen.title!!)
                 },
+                // Icon for the navigation item.
                 icon = {
                     Icon(imageVector = screen.icon!!, contentDescription = "")
                 },
+                // Determines if the navigation item is currently selected.
                 selected = currentRoute == screen.route,
+                // Action on click: navigates to the respective screen.
                 onClick = {
                     navController.navigate(screen.route) {
                         popUpTo(navController.graph.findStartDestination().id) {
@@ -60,12 +70,12 @@ fun BottomBar(
                         restoreState = true
                     }
                 },
+                // Customizes the colors for the navigation items.
                 colors = NavigationBarItemDefaults.colors(
-                    unselectedTextColor = Color.Gray,
-                    selectedTextColor = Color.Black
+                    unselectedTextColor = Color.Gray, // Color for unselected item text.
+                    selectedTextColor = Color.Black // Color for selected item text.
                 ),
             )
         }
     }
-
 }
