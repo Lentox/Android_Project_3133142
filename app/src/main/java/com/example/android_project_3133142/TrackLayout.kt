@@ -21,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
@@ -92,7 +93,7 @@ fun LazyVerticalGridWithIcons(
         columns = GridCells.Fixed(columns),
         userScrollEnabled = false,
         modifier = Modifier
-            .padding(top = 10.dp, bottom = 10.dp)
+            .padding(top = 30.dp, bottom = 10.dp)
     ) {
         items(items.size) {item ->
             Box(
@@ -129,10 +130,10 @@ fun LazyVerticalGridWithItems(
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(columns),
-        horizontalArrangement = Arrangement.spacedBy(10.dp),
+        horizontalArrangement = Arrangement.spacedBy(5.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp),
         userScrollEnabled = false,
-        modifier = Modifier
+        modifier = Modifier.padding(horizontal = 12.dp)
     ) {
         items(items.size) {item ->
             Box(
@@ -141,7 +142,7 @@ fun LazyVerticalGridWithItems(
                     .padding(8.dp)
                     .background(
                         colorResource(id = R.color.boxBackground),
-                        shape = RoundedCornerShape(25)
+                        shape = RoundedCornerShape(8.dp)
                     )
             ) {
                 Column(
@@ -153,7 +154,7 @@ fun LazyVerticalGridWithItems(
                         modifier = Modifier
                             .background(
                                 colorResource(id = R.color.tagBackground),
-                                shape = RoundedCornerShape(25)
+                                shape = RoundedCornerShape(8.dp)
                             )
                             .padding(6.dp)
                             .align(Alignment.CenterHorizontally)
