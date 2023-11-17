@@ -8,6 +8,6 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="navBackground">#70FFFFFF</color>
-    <color name="boxBackground">#FFFFFF</color>
+    <color name="boxBackground">#E7E0EC</color>
     <color name="tagBackground">#4300FF</color>
 </resources>

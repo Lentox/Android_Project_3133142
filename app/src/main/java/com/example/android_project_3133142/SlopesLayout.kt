@@ -2,10 +2,8 @@ package com.example.android_project_3133142
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,17 +16,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Landscape
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Place
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,76 +33,90 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 
+// Composable function to display a scrollable list of cards.
 @Composable
 fun ScrollableCardList(items: List<CardData>, onIconClick: (Int) -> Unit) {
+    // LazyColumn creates a vertically scrollable column that only composes and lays out the currently visible items.
     LazyColumn (
         modifier = Modifier
-            .height(
-                605.dp
-            )
+            .height(605.dp) // Explicit height of the LazyColumn.
     ){
+        // Creates a list of items based on the 'items' list passed to the function.
         itemsIndexed(items) { index, item ->
+            // Card composable to display each item.
             Card(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 10.dp, horizontal = 20.dp),
-                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+                    .fillMaxWidth() // Fills the maximum width available.
+                    .padding(vertical = 10.dp, horizontal = 20.dp), // Padding around the card.
+                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp) // Elevation of the card for shadow effect.
             ) {
+                // Row to arrange the image, text, and icon button horizontally.
                 Row(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                        .fillMaxWidth() // Fills the maximum width available.
+                        .padding(8.dp), // Padding inside the row.
+                    verticalAlignment = Alignment.CenterVertically // Vertically centers the row's children.
                 ) {
+                    // Image representing the item.
                     Image(
-                        painter = painterResource(id = item.imageRes),
-                        contentDescription = null,
-                        modifier = Modifier.size(100.dp)
-                            .clip(RoundedCornerShape(8.dp)),
-                        contentScale = ContentScale.Crop
+                        painter = painterResource(id = item.imageRes), // Image resource.
+                        contentDescription = null, // Accessibility description.
+                        modifier = Modifier.size(100.dp) // Size of the image.
+                            .clip(RoundedCornerShape(8.dp)), // Rounded corners of the image.
+                        contentScale = ContentScale.Crop // Scaling of the image.
                     )
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(8.dp)) // Spacer for horizontal spacing.
+
+                    // Column to arrange text vertically.
                     Column(
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f) // Column takes up the remaining space.
                     ) {
+                        // Box for the location text.
                         Box(
                             contentAlignment = Alignment.Center,
                             modifier = Modifier
-                                .wrapContentWidth() // Ändere dies, um die Breite an den Inhalt anzupassen
-                                .padding(horizontal = 4.dp, vertical = 4.dp) // Füge horizontalen Padding für besseres Aussehen hinzu
-                                .clip(RoundedCornerShape(8.dp)) // Füge diesen Modifier hinzu, um die Ecken abzurunden
-                                .background(Color.Blue) // Hintergrundfarbe der Box
+                                .wrapContentWidth()
+                                .padding(horizontal = 4.dp, vertical = 4.dp)
+                                .clip(RoundedCornerShape(8.dp)) // Rounded corners for the box.
+                                .background(Color.Blue) // Background color of the box.
                         ) {
+                            // Text displaying the location.
                             Text(
                                 modifier = Modifier
-                                    .padding(6.dp),
+                                    .padding(6.dp), // Padding inside the text box.
                                 text = item.location,
-                                color = Color.White
+                                color = Color.White // Text color.
                             )
                         }
+                        // Iterating over the details list to display icon and text pairs.
                         item.details.forEach { detail ->
                             Row(
-                                verticalAlignment = Alignment.CenterVertically
+                                verticalAlignment = Alignment.CenterVertically // Vertically centers the row's children.
                             ) {
+                                // Icon for the detail.
                                 Icon(
-                                    imageVector = detail.icon,
-                                    contentDescription = null
+                                    imageVector = detail.icon, // Icon vector.
+                                    contentDescription = null // Accessibility description.
                                 )
-                                Spacer(modifier = Modifier.width(4.dp))
+                                Spacer(modifier = Modifier.width(4.dp)) // Spacer for horizontal spacing.
+                                // Text corresponding to the icon.
                                 Text(text = detail.text)
                             }
                         }
+                        // Text displaying the date.
                         Text(
                             text = item.date,
-                            color = Color.Gray,
-                            style = MaterialTheme.typography.titleSmall
+                            color = Color.Gray, // Text color.
+                            style = MaterialTheme.typography.titleSmall // Text style.
                         )
                     }
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(8.dp)) // Spacer for horizontal spacing.
+
+                    // Icon button to handle click events.
                     IconButton(onClick = { onIconClick(index) }) {
                         Icon(
-                            imageVector = Icons.Default.MoreVert,
-                            contentDescription = "Mehr Optionen"
+                            imageVector = Icons.Default.MoreVert, // Icon vector.
+                            contentDescription = "Mehr Optionen" // Accessibility description.
                         )
                     }
                 }
@@ -117,14 +125,16 @@ fun ScrollableCardList(items: List<CardData>, onIconClick: (Int) -> Unit) {
     }
 }
 
+// Data class representing the data for a card.
 data class CardData(
-    val imageRes: Int,
-    val location: String,
-    val details: List<IconTextPair>,
-    val date: String
+    val imageRes: Int, // Resource ID of the image.
+    val location: String, // Location text.
+    val details: List<IconTextPair>, // List of icon-text pairs.
+    val date: String // Date text.
 )
 
+// Data class representing an icon and a text.
 data class IconTextPair(
-    val icon: ImageVector,
-    val text: String
+    val icon: ImageVector, // Icon vector.
+    val text: String // Corresponding text.
 )

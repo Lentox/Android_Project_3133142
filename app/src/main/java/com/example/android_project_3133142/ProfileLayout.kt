@@ -1,0 +1,104 @@
+package com.example.android_project_3133142
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+
+// Data class representing a statistic, consisting of a label, a value, and an icon.
+data class Statistic(
+    val label: String,
+    val value: String,
+    val icon: ImageVector
+)
+
+// Composable function to display a single statistic.
+@Composable
+fun StatisticBox(statistic: Statistic) {
+    // Container box for the statistic.
+    Box(
+        modifier = Modifier
+            .fillMaxWidth() // Fills the maximum width available.
+            .padding(16.dp) // Padding around the box.
+    ) {
+        // Row layout to arrange icon and text horizontally.
+        Row(
+            verticalAlignment = Alignment.CenterVertically, // Centers children vertically.
+            horizontalArrangement = Arrangement.Center, // Centers children horizontally.
+            modifier = Modifier.fillMaxWidth() // Fills the maximum width available.
+        ) {
+            // Icon representing the statistic.
+            Icon(
+                imageVector = statistic.icon,
+                contentDescription = "Statistik Icon",
+                modifier = Modifier.size(24.dp) // Sets the size of the icon.
+            )
+            Spacer(modifier = Modifier.width(8.dp)) // Spacer for horizontal spacing.
+            // Column layout to arrange texts vertically.
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally, // Centers children horizontally.
+                modifier = Modifier.weight(1f) // Fills the available space.
+            ) {
+                // Text showing the label of the statistic.
+                Text(
+                    text = statistic.label,
+                    fontWeight = FontWeight.Bold, // Bold font weight.
+                    textAlign = TextAlign.Center // Text aligned to center.
+                )
+                // Text showing the value of the statistic.
+                Text(
+                    text = statistic.value,
+                    textAlign = TextAlign.Center // Text aligned to center.
+                )
+            }
+        }
+    }
+}
+
+// Composable function to display a list of statistics.
+@Composable
+fun ProfileStatisticsView(statistics: List<Statistic>) {
+    // Container box for the whole statistics view.
+    Box(
+        modifier = Modifier
+            .fillMaxWidth() // Fills the maximum width available.
+            .padding(16.dp) // Padding around the box.
+            .clip(RoundedCornerShape(12.dp)) // Rounded corners for the box.
+            .background(Color.White.copy(alpha = 0.8f)) // Semi-transparent white background.
+            .padding(16.dp) // Additional padding inside the box.
+    ) {
+        // Column layout to arrange statistic boxes vertically.
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally, // Centers children horizontally.
+            verticalArrangement = Arrangement.spacedBy(16.dp), // Spacing between children.
+            modifier = Modifier.fillMaxWidth() // Fills the maximum width available.
+        ) {
+            // Iterates over the list of statistics and creates a box for each.
+            statistics.forEach { statistic ->
+                StatisticBox(statistic)
+            }
+        }
+    }
+}
+
+
+
+
