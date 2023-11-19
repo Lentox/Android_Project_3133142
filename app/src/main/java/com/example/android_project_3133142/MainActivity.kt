@@ -15,12 +15,20 @@ import androidx.navigation.compose.rememberNavController
 
 // MainActivity class which extends ComponentActivity, the base class for activities in Jetpack Compose.
 class MainActivity : ComponentActivity() {
+
+    private lateinit var locationManager: LocationManager
+
     // Suppresses Lint warnings for the unused Scaffold padding parameter.
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     // Marks that this code uses experimental features of Material3.
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        locationManager = LocationManager(this)
+        locationManager.checkLocationPermission()
+
+
         // Set the content of the activity.
         setContent {
             // Creates and remembers a navigation controller for managing app navigation.
@@ -49,6 +57,10 @@ class MainActivity : ComponentActivity() {
                 NavigationGraph(navController = navController)
             }
         }
+    }
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        locationManager.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 }
 

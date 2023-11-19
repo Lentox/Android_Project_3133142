@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -69,5 +71,12 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 }
 dependencies {
-    implementation ("androidx.navigation:navigation-compose:2.4.0-beta02")
+    implementation("com.google.android.gms:play-services-location:21.0.1")
+    implementation ("androidx.navigation:navigation-compose:2.7.5")
+    implementation ("com.github.kittinunf.fuel:fuel:2.3.1") // für HTTP-Anfragen
+    implementation ("com.github.kittinunf.fuel:fuel-json:2.3.1") // für JSON-Verarbeitung
+    implementation ("io.coil-kt:coil-compose:1.3.2")
+    implementation ("androidx.room:room-runtime:2.3.0")
+    implementation ("androidx.room:room-ktx:2.3.0") // Für Kotlin-Unterstützung
+
 }

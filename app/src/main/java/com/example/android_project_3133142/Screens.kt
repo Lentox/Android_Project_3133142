@@ -6,12 +6,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DownhillSkiing
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Height
 import androidx.compose.material.icons.filled.Landscape
-import androidx.compose.material.icons.filled.NotificationImportant
-import androidx.compose.material.icons.filled.Place
-import androidx.compose.material.icons.filled.SocialDistance
 import androidx.compose.material.icons.filled.Speed
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -28,6 +24,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+
 // Composable function for the Home Screen.
 @Composable
 fun HomeScreen() {
@@ -41,7 +38,7 @@ fun HomeScreen() {
             )
     ) {
         // Display weather data on the home screen.
-        WeatherDisplay(weatherData = getSampleWeatherData())
+        WeatherDisplay()
     }
 }
 
@@ -99,6 +96,9 @@ fun SlopesScreen() {
             fontSize = 30.sp,
             fontFamily = FontFamily.SansSerif
         )
+
+
+
         // Example data for the slopes screen cards.
         val exampleData = listOf(
             // Creating instances of CardData for the cards.
