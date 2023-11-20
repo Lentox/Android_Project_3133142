@@ -1,5 +1,6 @@
 package com.example.android_project_3133142
 
+import android.annotation.SuppressLint
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -33,6 +34,7 @@ class WeatherService {
         val conditionIcon: String
     )
 
+    @SuppressLint("SuspiciousIndentation")
     fun getWeather(latitude: Double, longitude: Double) {
 
         val url = "https://api.weatherapi.com/v1/forecast.json?key=$apiKey&q=$latitude,$longitude&aqi=no"
@@ -64,27 +66,46 @@ class WeatherService {
 
                 for (i in 0 until hourlyForecast.length()) {
                     val hourForecast = hourlyForecast.getJSONObject(i)
-                    val forecastTime = LocalDateTime.parse(hourForecast.getString("time").replace(" ", "T"))
+                    val forecastTime = hourForecast.getString("time").replace(" ", "T").split("T")[1]
 
                     val hourlyTemp = hourForecast.getDouble("temp_c")
                     val hourlyConditionIcon = hourForecast.getJSONObject("condition").getString("icon")
 
 
-                        if (forecastTime.hour == LocalTime.now().hour || forecastTime.hour == LocalTime.now().hour + 1 || forecastTime.hour == LocalTime.now().hour + 2 || forecastTime.hour == LocalTime.now().hour + 3) {
-                            val forecastWeatherData = HourlyForecast(
-                                hour = forecastTime.hour,
-                                temp = hourlyTemp,
-                                conditionIcon = hourlyConditionIcon
-                            )
 
-                            println("Forecast: " + forecastWeatherData)
-                            forecastOutputs.add(forecastWeatherData)
+                    fun getNextHour(hour: Int): Int {
+                        return (hour + 1) % 24 // Modulo 24 sorgt für den Wrap-around bei 24
+                    }
+
+                    val now = LocalTime.now().hour
+
+                    var hoursToCheck = listOf(now, getNextHour(now), getNextHour(getNextHour(now)), getNextHour(getNextHour(getNextHour(now))))
+
+                    val updatedHours = hoursToCheck.map {
+                        if (it < 10) "0$it" else "$it"
+                    }
+
+                    var forecastTimeHour = forecastTime.substring(0,2)
+
+                    for (i in hoursToCheck){
+                        for (j in forecastTime){
+                            if (updatedHours[i] == forecastTimeHour){
+                                val forecastWeatherData = HourlyForecast(
+                                    hour = forecastTimeHour.toInt(),
+                                    temp = hourlyTemp,
+                                    conditionIcon = hourlyConditionIcon
+                                )
+
+                                println("Forecast: $forecastWeatherData")
+                                forecastOutputs.add(forecastWeatherData)
+                                break
+                            }
                         }
-
+                    }
                 }
                 // Wetterdatenobjekt erstellen und verwenden
-                weatherDataAPI = WeatherData(location, temp, maxTemp, minTemp, conditionIconUrl, humidity, cloud, conditionText,
-                    forecastOutputs)
+                weatherDataAPI = WeatherData(location, temp, maxTemp, minTemp, conditionIconUrl, humidity, cloud, conditionText, forecastOutputs)
+
             }, failure = { error ->
                 println("An error occurred: ${error.message}")
             })

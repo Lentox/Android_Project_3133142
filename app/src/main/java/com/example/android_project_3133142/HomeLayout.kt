@@ -151,7 +151,6 @@ fun TransparentBoxWithHourlyForecast(hourlyForecast: MutableList<WeatherService.
             ) {
                 // Iterating over hourly forecasts to display each.
                 hourlyForecast?.forEach { forecast ->
-                    println("printing hourlyforecast")
                     HourlyWeatherDisplay(forecast)
                 }
             }
@@ -193,7 +192,7 @@ fun HourlyWeatherDisplay(forecast: WeatherService.HourlyForecast) {
             )
         }else if(forecast.hour < 10){
             Text(
-                text = forecast.hour.toString() + ":00",
+                text = "0" + forecast.hour.toString() + ":00",
                 style = MaterialTheme.typography.bodyMedium, // Text style.
                 fontFamily = FontFamily.SansSerif,
                 fontWeight = FontWeight.Bold // Font family.
