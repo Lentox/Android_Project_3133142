@@ -17,6 +17,8 @@ import androidx.navigation.compose.rememberNavController
 class MainActivity : ComponentActivity() {
 
     private lateinit var locationManager: LocationManager
+    private  lateinit var barometerManager: BarometerManager
+    private lateinit var accelerometerManager: AccelerometerManager
 
     // Suppresses Lint warnings for the unused Scaffold padding parameter.
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -28,15 +30,15 @@ class MainActivity : ComponentActivity() {
         locationManager = LocationManager(this)
         locationManager.checkLocationPermission()
 
+        barometerManager = BarometerManager(this)
+
+        accelerometerManager = AccelerometerManager(this)
+
 
         // Set the content of the activity.
         setContent {
             // Creates and remembers a navigation controller for managing app navigation.
             val navController: NavHostController = rememberNavController()
-            // Defines the height for the bottom bar.
-            val bottomBarHeight = 56.dp
-            // Remembers the offset height for the bottom bar in pixels.
-            val bottomBarOffsetHeightPx = remember { mutableStateOf(0f) }
 
             // Remembers the state of button visibility.
             var buttonsVisible = remember { mutableStateOf(true) }

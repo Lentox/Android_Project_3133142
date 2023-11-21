@@ -71,6 +71,7 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 }
 dependencies {
+    implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.gms:play-services-location:21.0.1")
     implementation ("androidx.navigation:navigation-compose:2.7.5")
     implementation ("com.github.kittinunf.fuel:fuel:2.3.1") // für HTTP-Anfragen

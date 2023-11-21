@@ -42,7 +42,7 @@ class WeatherService {
         forecastOutputs.clear()
         weatherDataAPI?.hourlyForecasts?.clear()
 
-        Fuel.get(url).responseJson { _, response, result ->
+        Fuel.get(url).responseJson { _, _, result ->
             result.fold(success = { json ->
                 val jsonResponse = json.obj()
                 val location = jsonResponse.getJSONObject("location").getString("name")
@@ -87,16 +87,14 @@ class WeatherService {
 
                     var forecastTimeHour = forecastTime.substring(0,2)
 
-                    for (i in hoursToCheck){
-                        for (j in forecastTime){
+                    for (i in hoursToCheck.indices){
+                        for (j in forecastTime.indices){
                             if (updatedHours[i] == forecastTimeHour){
                                 val forecastWeatherData = HourlyForecast(
                                     hour = forecastTimeHour.toInt(),
                                     temp = hourlyTemp,
                                     conditionIcon = hourlyConditionIcon
                                 )
-
-                                println("Forecast: $forecastWeatherData")
                                 forecastOutputs.add(forecastWeatherData)
                                 break
                             }
