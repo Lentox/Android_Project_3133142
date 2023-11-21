@@ -12,6 +12,9 @@ import androidx.compose.material3.Icon
 import kotlin.math.pow
 import kotlin.math.sqrt
 
+var totalDistance = 0f
+var startTimeT = 0L
+
 class AccelerometerManager(context: Context) : SensorEventListener {
     // Initialize the SensorManager to interact with the device's sensors.
     private var sensorManager: SensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
@@ -25,9 +28,6 @@ class AccelerometerManager(context: Context) : SensorEventListener {
 
     private var lastUpdateT = 0L
     private val updateInterval = 1000L // Update interval of 1 second (1000 milliseconds)
-
-    private var totalDistance = 0f
-    private var startTime = 0L
 
     private var filteredAcceleration = FloatArray(3) { 0f }
     private val alpha = 0.3f // Filterkonstante, zwischen 0 und 1, wobei ein höherer Wert eine stärkere Glättung bedeutet
@@ -66,8 +66,8 @@ class AccelerometerManager(context: Context) : SensorEventListener {
                         speed += accelerationMagnitude * timeDiff / 1000
                     }
 
-                    if (startTime == 0L) {
-                        startTime = currentTime
+                    if (startTimeT == 0L) {
+                        startTimeT = currentTime
                     } else {
                         totalDistance += speed * timeDiff / 1000
                     }
@@ -89,7 +89,7 @@ class AccelerometerManager(context: Context) : SensorEventListener {
         return speed * 3.6 // Convert speed to km/h (if speed is in m/s)
     }
     fun getAverageVelocity(): Double {
-        val elapsedTimeMillis = if (startTime > 0) System.currentTimeMillis() - startTime else 1
+        val elapsedTimeMillis = if (startTimeT > 0) System.currentTimeMillis() - startTimeT else 1
         val elapsedTimeSeconds = elapsedTimeMillis / 1000.0 // Umrechnung von Millisekunden in Sekunden
         if (elapsedTimeSeconds == 0.0) return 0.0 // Vermeide Division durch Null
         return (totalDistance / elapsedTimeSeconds) * 3.6 // Umrechnung von m/s in km/h

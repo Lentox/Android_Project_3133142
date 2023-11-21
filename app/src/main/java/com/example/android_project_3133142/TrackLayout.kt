@@ -50,6 +50,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import java.util.Timer
 import java.util.TimerTask
+import kotlin.math.atan
 import kotlin.math.round
 
 var Latitude = "-6.278581"
@@ -70,7 +71,7 @@ var maxVelocity = 0
 var averageVelocity = 0
 
 var oldAltitude = 0
-var currentPitch = 0.0
+var gradient = 0
 
 // A Composable function to create a grid layout.
 @SuppressLint("ServiceCast")
@@ -87,7 +88,7 @@ fun GridLayout() {
     var minAltitude by remember { mutableStateOf(0) }
     var deltaAltitude by remember { mutableStateOf(0) }
 
-    var values2 by remember { mutableStateOf(listOf("0", "00:00:00", "0°")) }
+    var values2 by remember { mutableStateOf(listOf("0", "00:00:00", "0%")) }
 
     var values by remember { mutableStateOf(listOf("0 km/h", "0 km/h", "\n0 km\n\n", "Max 0m\nMin 0m\nDelta 0m\n")) }
 
@@ -295,7 +296,7 @@ fun GridLayout() {
     val item2 = listOf(
         "Runs",
         "Duration",
-        "Pitch"
+        "Gradient"
     )
 
     // Creates a lazy vertical grid with 3 columns using the above items and values.
@@ -339,9 +340,6 @@ fun GridLayout() {
                         maxVelocity = velocity
                     }
 
-                    println("Velocity: " + velocity)
-                    println("Max.Velocity: " + maxVelocity)
-                    println("Avg.Velocity: " + averageVelocity)
                     values = values.toMutableList().apply {
                         set(0, "$maxVelocity km/h")
                     }
@@ -363,31 +361,35 @@ fun GridLayout() {
                         set(2, "\n${Distance} km\n\n")
                     }
 
-                    // update Pitch
-                    /*values2 = values2.toMutableList().apply {
+                    // update Gradient
+                    if (oldAltitude == 0){
+                        oldAltitude = round(Altitude.toDouble()).toInt()
+                    }
 
-                        if (oldAltitude == 0){
-                            set(2, "0°")
+                    if (Distance.toInt() != 0 && oldAltitude != round(Altitude.toDouble()).toInt()){
 
-                            oldAltitude = round(Altitude.toDouble()).toInt()
+                        var heightDiffrence = 0
 
+                        heightDiffrence = if (oldAltitude > round(Altitude.toDouble()).toInt()){
+                            oldAltitude - round(Altitude.toDouble()).toInt()
                         }else{
-                            var pitch = 0.0
-                            pitch = if (oldAltitude > round(Altitude.toDouble()).toInt()){
-                                calculatePitch(oldAltitude.toFloat(), Altitude.toFloat(), (oldAltitude - Altitude.toInt()).toFloat())
-                            }else{
-                                calculatePitch(round(Altitude.toDouble()).toFloat(), oldAltitude.toFloat(), (round(Altitude.toDouble()) - oldAltitude).toFloat())
-                            }
-                            if (pitch > currentPitch){
-                                currentPitch = pitch
-                            }
-                            set(2, round(currentPitch).toInt().toString() + "°")
-
-                            oldAltitude = round(Altitude.toDouble()).toInt()
+                            round(Altitude.toDouble()).toInt() - oldAltitude
                         }
-                    }*/
 
-                    altitudeValues.add(round(Altitude.toDouble()).toInt().toString())
+                        val (slopePercentage, slopeAngle) = calculateGradient(heightDiffrence.toDouble(), Distance.toDouble())
+
+                        var gradientPerc = round(slopePercentage).toInt()
+
+                        if (gradient < gradientPerc){
+                            values2 = values2.toMutableList().apply {
+                                set(2, "$gradientPerc%")
+                            }
+                            gradient = gradientPerc
+                        }
+                        oldAltitude = round(Altitude.toDouble()).toInt()
+                    }
+
+                    //altitudeValues.add(round(Altitude.toDouble()).toInt().toString())
                 }
             }, 0, 1000) // Aktualisierung jede Sekunde
             isStopwatchRunning = true
@@ -420,17 +422,18 @@ fun GridLayout() {
         // Werte zurücksetzen
         values2 = values2.toMutableList().apply {
             set(1, "00:00:00")
-        }
-        values2 = values2.toMutableList().apply {
             set(0, "0")
         }
         runs = 0
         values = values.toMutableList().apply {
             set(3, "Max 0m\nMin 0m\nDelta 0m\n")
-        }
-        values = values.toMutableList().apply {
             set(2, "\n0 km\n\n")
+            set(1, "0 km/h")
+            set(0, "0 km/h")
         }
+        totalDistance = 0f
+        startTimeT = 0L
+        maxVelocity = 0
         Distance = "0"
         lastLatitude = 0.0
         lastLongitude = 0.0
@@ -461,11 +464,13 @@ fun GridLayout() {
     }
 }
 
-fun calculatePitch(height1: Float, height2: Float, distance: Float): Double {
-    //println("Calculate: " + height1 + ", " + height2 + "," + distance)
-    val heightDifference = height1 - height2  // Höhenunterschied
-    //println(((heightDifference / distance) * 100).toDouble())
-    return ((heightDifference / distance) * 100).toDouble() // Berechnung der Steigung in Prozent
+fun calculateGradient(heightDifference: Double, horizontalDistance: Double): Pair<Double, Double> {
+    if (horizontalDistance == 0.0) {
+        throw IllegalArgumentException("Horizontale Entfernung kann nicht 0 sein.")
+    }
+    val slopePercentage = (heightDifference / horizontalDistance) * 100
+    val slopeAngle = Math.toDegrees(atan(heightDifference / horizontalDistance))
+    return Pair(slopePercentage, slopeAngle)
 }
 
 fun onSettingsButtonClick() {
