@@ -368,15 +368,15 @@ fun GridLayout() {
 
                     if (Distance.toInt() != 0 && oldAltitude != round(Altitude.toDouble()).toInt()){
 
-                        var heightDiffrence = 0
+                        var heightDiff = 0
 
-                        heightDiffrence = if (oldAltitude > round(Altitude.toDouble()).toInt()){
+                        heightDiff = if (oldAltitude > round(Altitude.toDouble()).toInt()){
                             oldAltitude - round(Altitude.toDouble()).toInt()
                         }else{
                             round(Altitude.toDouble()).toInt() - oldAltitude
                         }
 
-                        val (slopePercentage, slopeAngle) = calculateGradient(heightDiffrence.toDouble(), Distance.toDouble())
+                        val (slopePercentage, slopeAngle) = calculateGradient(heightDiff.toDouble(), Distance.toDouble())
 
                         var gradientPerc = round(slopePercentage).toInt()
 
