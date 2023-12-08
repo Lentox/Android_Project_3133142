@@ -24,7 +24,7 @@ fun NavigationGraph(navController: NavHostController) {
         }
         // Defines a composable destination for the Slopes screen.
         composable(Destinations.Slopes.route) {
-            SlopesScreen() // Calls the SlopesScreen composable function.
+            SlopesScreen(navController) // Calls the SlopesScreen composable function.
         }
         // Defines a composable destination for the Profile screen.
         composable(Destinations.Profile.route) {

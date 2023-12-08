@@ -23,6 +23,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 
 // Composable function for the Home Screen.
@@ -72,7 +78,7 @@ fun TrackScreen() {
 
 // Composable function for the Slopes Screen.
 @Composable
-fun SlopesScreen() {
+fun SlopesScreen(navController: NavHostController) {
     // Column layout for the slopes screen.
     Column(
         modifier = Modifier
@@ -97,57 +103,32 @@ fun SlopesScreen() {
             fontFamily = FontFamily.SansSerif
         )
 
+        var exampleData = mutableListOf<CardData>()
 
-
-        // Example data for the slopes screen cards.
-        val exampleData = listOf(
-            // Creating instances of CardData for the cards.
-            CardData(
-                imageRes = R.drawable.stchrisophtmp,
-                location = "St.Christoph",
-                details = listOf(
-                    IconTextPair(Icons.Default.DownhillSkiing, "21,2 km"),
-                    IconTextPair(Icons.Default.Landscape, "3.565 m"),
-                    IconTextPair(Icons.Default.Speed, "82,5 km/h")
-                ),
-                date = "Oktober 30, 2023"
-            ),
-            CardData(
-                imageRes = R.drawable.stchrisophtmp,
-                location = "St.Christoph",
-                details = listOf(
-                    IconTextPair(Icons.Default.DownhillSkiing, "21,2 km"),
-                    IconTextPair(Icons.Default.Landscape, "3.565 m"),
-                    IconTextPair(Icons.Default.Speed, "82,5 km/h")
-                ),
-                date = "Oktober 30, 2023"
-            ),
-            CardData(
-                imageRes = R.drawable.stchrisophtmp,
-                location = "St.Christoph",
-                details = listOf(
-                    IconTextPair(Icons.Default.DownhillSkiing, "21,2 km"),
-                    IconTextPair(Icons.Default.Landscape, "3.565 m"),
-                    IconTextPair(Icons.Default.Speed, "82,5 km/h")
-                ),
-                date = "Oktober 30, 2023"
-            ),
-            CardData(
-                imageRes = R.drawable.stchrisophtmp,
-                location = "St.Christoph",
-                details = listOf(
-                    IconTextPair(Icons.Default.DownhillSkiing, "21,2 km"),
-                    IconTextPair(Icons.Default.Landscape, "3.565 m"),
-                    IconTextPair(Icons.Default.Speed, "82,5 km/h")
-                ),
-                date = "Oktober 30, 2023"
-            ),
-
-        )
+        for(slope in slopesArray){
+            exampleData.add(
+                CardData(
+                    imageRes = R.drawable.stchrisophtmp,
+                    location = slope.location,
+                    details = listOf(
+                        IconTextPair(Icons.Default.DownhillSkiing, slope.distance.toString() + " km"),
+                        IconTextPair(Icons.Default.Landscape, slope.altitude.delta.toString() + " m"),
+                        IconTextPair(Icons.Default.Speed, slope.maxVelocity.toString() + " km/h")
+                    ),
+                    date = slope.date
+                )
+            )
+        }
         // Displaying a scrollable list of cards with the example data.
         ScrollableCardList(exampleData) { index ->
-            // Placeholder for icon click handling. Currently, it prints the index of the clicked icon.
-            println("Icon bei Index $index geklickt")
+            navController.navigate(Destinations.Track.route) {
+                popUpTo(navController.graph.findStartDestination().id) {
+                    saveState = true
+                }
+                launchSingleTop = true
+                restoreState = true
+            }
+            displaySlopeCard(slopesArray[index])
         }
     }
 }

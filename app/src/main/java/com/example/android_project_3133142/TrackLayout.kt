@@ -32,7 +32,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -44,20 +43,23 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.Timer
 import java.util.TimerTask
 import kotlin.math.atan
 import kotlin.math.round
 
-var Latitude = "-6.278581"
-var Longtitude = "-6.278581"
-var Altitude = "23 m"
-var Timestamp = "2023-11-19 20:03:42 +0000"
-var Distance = "0"
+var latitude = "-6.278581"
+var longtitude = "-6.278581"
+var altitude = "23 m"
+var timestamp = "2023-11-19 20:03:42 +0000"
+var distance = "0"
 
 var isStopwatchRunning = false
 var elapsedTimeWhenPaused = 0L
@@ -72,6 +74,24 @@ var averageVelocity = 0
 
 var oldAltitude = 0
 var gradient = 0
+
+var isCardDisplayed = false
+var currentDisplayedCard: Slope? = null
+
+var slopesArray = mutableListOf<Slope>(
+    Slope(
+        id = 1,
+        maxVelocity = 30,
+        avgVelocity = 20,
+        distance = 500,
+        altitude = Altitude(max = 100, min = 50, delta = 50),
+        runs = 5,
+        duration = System.currentTimeMillis().toString(),
+        gradient = 10,
+        location = "St.Christoph",
+        date = "Oktober 30, 2023"
+    )
+)
 
 // A Composable function to create a grid layout.
 @SuppressLint("ServiceCast")
@@ -92,7 +112,7 @@ fun GridLayout() {
 
     var values by remember { mutableStateOf(listOf("0 km/h", "0 km/h", "\n0 km\n\n", "Max 0m\nMin 0m\nDelta 0m\n")) }
 
-    val altitudeValues = mutableListOf<String>()
+    val dbHelper = MyDatabaseHelper(context = LocalContext.current)
 
     var icon = remember {
         mutableStateListOf(
@@ -123,17 +143,19 @@ fun GridLayout() {
                         .fillMaxSize() // Fills the maximum size available.
                         .padding(start = 10.dp, end = 10.dp) // Padding for each item.
                         .background(
-                            if (((item == 0 || item == 2 || item == 4) && !play && !trackOnGoing)
-                                || ((item == 0 || item == 2 || item == 4) && trackOnGoing)
-                                || ((item == 1 || item == 3) && trackOnGoing && !play)
+                            if (((item == 0 || item == 2 || item == 4) && !play && !trackOnGoing && !isCardDisplayed)
+                                || ((item == 0 || item == 2 || item == 4) && trackOnGoing && !isCardDisplayed)
+                                || ((item == 1 || item == 3) && trackOnGoing && !play && !isCardDisplayed)
+                                || ((item == 0 || item == 1 || item == 2)  && isCardDisplayed)
                             )
                                 colorResource(id = R.color.boxBackground) else Color.Gray, // Hintergrundfarbe des Elements.
                             shape = RoundedCornerShape(25) // Abgerundete Ecken für das Element.
                         )
                         .then(
-                            if (((item == 0 || item == 2 || item == 4) && !play && !trackOnGoing)
-                                || ((item == 0 || item == 2 || item == 4) && trackOnGoing)
-                                || ((item == 1 || item == 3) && trackOnGoing && !play)
+                            if (((item == 0 || item == 2 || item == 4) && !play && !trackOnGoing && !isCardDisplayed)
+                                || ((item == 0 || item == 2 || item == 4) && trackOnGoing && !isCardDisplayed)
+                                || ((item == 1 || item == 3) && trackOnGoing && !play && !isCardDisplayed)
+                                || ((item == 0 || item == 1 || item == 2)  && isCardDisplayed)
                             )
                                 Modifier.clickable { onIconClick(item) } else Modifier
                         )
@@ -285,8 +307,8 @@ fun GridLayout() {
     val item = listOf(
         "Max. Velocity",
         "Avg. Velocity",
-        "Distance",
-        "Altitude"
+        "distance",
+        "altitude"
     )
 
     // Creates a lazy vertical grid with 2 columns using the above items and values.
@@ -312,6 +334,35 @@ fun GridLayout() {
 
     LazyVerticalGridWithGraph(items = item3, values = values3, columns = 1)
 
+    if (isCardDisplayed){
+        // show Timer
+        values2 = values2.toMutableList().apply {
+            set(1, currentDisplayedCard?.duration ?: "Loading...") // Index 1 ist "00:00:00"
+        }
+        // show MaxVelocity
+        values = values.toMutableList().apply {
+            set(0, currentDisplayedCard?.maxVelocity.toString() + " km/h")
+        }
+        // show AverageVelocity
+        values = values.toMutableList().apply {
+            set(1, currentDisplayedCard?.avgVelocity.toString() + " km/h")
+        }
+        // show Altitude
+        values = values.toMutableList().apply {
+            set(3, "Max ${currentDisplayedCard?.altitude?.max}m\nMin ${currentDisplayedCard?.altitude?.min}m\nDelta ${currentDisplayedCard?.altitude?.delta}m\n")
+        }
+
+        // show distance
+        values = values.toMutableList().apply {
+            set(2, "\n${currentDisplayedCard?.distance} km\n\n")
+        }
+
+        // show Gradient
+        values2 = values2.toMutableList().apply {
+            set(2, "${currentDisplayedCard?.gradient}%")
+        }
+    }
+
     fun onPlayButtonClick() {
         if (isStopwatchRunning) {
             // Pause the stopwatch
@@ -319,6 +370,7 @@ fun GridLayout() {
             timer?.cancel()
             isStopwatchRunning = false
         } else {
+            isCardDisplayed = false
             // Resume or start the stopwatch
             startTime = System.currentTimeMillis() - elapsedTimeWhenPaused
             timer?.cancel()  // Sicherstellen, dass kein Timer bereits läuft
@@ -346,37 +398,37 @@ fun GridLayout() {
                     values = values.toMutableList().apply {
                         set(1, "$averageVelocity km/h")
                     }
-                    // update Altitude
-                    maxAltitude = maxOf(maxAltitude.toDouble().toInt(), Altitude.toDouble().toInt())
-                    if (minAltitude == 0 || minAltitude > Altitude.toDouble().toInt()) {
-                        minAltitude = Altitude.toDouble().toInt()
+                    // update altitude
+                    maxAltitude = maxOf(maxAltitude.toDouble().toInt(), altitude.toDouble().toInt())
+                    if (minAltitude == 0 || minAltitude > altitude.toDouble().toInt()) {
+                        minAltitude = altitude.toDouble().toInt()
                     }
                     deltaAltitude = maxAltitude - minAltitude
                     values = values.toMutableList().apply {
                         set(3, "Max ${maxAltitude}m\nMin ${minAltitude}m\nDelta ${deltaAltitude}m\n")
                     }
 
-                    // update Distance
+                    // update distance
                     values = values.toMutableList().apply {
-                        set(2, "\n${Distance} km\n\n")
+                        set(2, "\n${distance} km\n\n")
                     }
 
                     // update Gradient
                     if (oldAltitude == 0){
-                        oldAltitude = round(Altitude.toDouble()).toInt()
+                        oldAltitude = round(altitude.toDouble()).toInt()
                     }
 
-                    if (Distance.toInt() != 0 && oldAltitude != round(Altitude.toDouble()).toInt()){
+                    if (distance.toInt() != 0 && oldAltitude != round(altitude.toDouble()).toInt()){
 
                         var heightDiff = 0
 
-                        heightDiff = if (oldAltitude > round(Altitude.toDouble()).toInt()){
-                            oldAltitude - round(Altitude.toDouble()).toInt()
+                        heightDiff = if (oldAltitude > round(altitude.toDouble()).toInt()){
+                            oldAltitude - round(altitude.toDouble()).toInt()
                         }else{
-                            round(Altitude.toDouble()).toInt() - oldAltitude
+                            round(altitude.toDouble()).toInt() - oldAltitude
                         }
 
-                        val (slopePercentage, slopeAngle) = calculateGradient(heightDiff.toDouble(), Distance.toDouble())
+                        val (slopePercentage, slopeAngle) = calculateGradient(heightDiff.toDouble(), distance.toDouble())
 
                         var gradientPerc = round(slopePercentage).toInt()
 
@@ -386,10 +438,10 @@ fun GridLayout() {
                             }
                             gradient = gradientPerc
                         }
-                        oldAltitude = round(Altitude.toDouble()).toInt()
+                        oldAltitude = round(altitude.toDouble()).toInt()
                     }
 
-                    //altitudeValues.add(round(Altitude.toDouble()).toInt().toString())
+                    //altitudeValues.add(round(altitude.toDouble()).toInt().toString())
                 }
             }, 0, 1000) // Aktualisierung jede Sekunde
             isStopwatchRunning = true
@@ -410,7 +462,7 @@ fun GridLayout() {
 
     }
 
-    fun onDeleteButtonClick() {
+    fun resetValues(){
         play = false
         trackOnGoing = false
 
@@ -434,13 +486,60 @@ fun GridLayout() {
         totalDistance = 0f
         startTimeT = 0L
         maxVelocity = 0
-        Distance = "0"
+        distance = "0"
         lastLatitude = 0.0
         lastLongitude = 0.0
         maxAltitude = 0
         minAltitude = 0
         deltaAltitude = 0
+        gradient = 0
     }
+
+    fun onDeleteButtonClick() {
+        if (isCardDisplayed){
+            // Delete displayed card
+            isCardDisplayed = false
+            for (slope in slopesArray){
+                if (slope == currentDisplayedCard){
+                    dbHelper.deleteSlope(slope)
+                    slopesArray.remove(slope)
+                }
+            }
+            resetValues()
+        }else{
+            // Delete current track
+            resetValues()
+        }
+    }
+
+    fun onSaveButtonClick() {
+
+        val currentDate = LocalDate.now()
+        val formatter = DateTimeFormatter.ofPattern("MMMM dd, yyyy")
+
+        val formattedDate = currentDate.format(formatter)
+
+        // Save Data into SlopesArray
+        val altitudeObj = Altitude(max = maxAltitude, min = minAltitude, delta = deltaAltitude)
+        val slopeObj = Slope(
+            id = (slopesArray.size + 1).toLong(),
+            maxVelocity = maxVelocity,
+            avgVelocity = averageVelocity,
+            distance = distance.toInt(),
+            altitude = altitudeObj,
+            runs = runs,
+            duration =  formatElapsedTime(System.currentTimeMillis() - startTime),
+            gradient = gradient,
+            location = "${weatherDataAPI?.location ?: "Loading..."}",
+            date = formattedDate
+        )
+        slopesArray.add(slopeObj)
+        println("Saved Index: " + (slopesArray.size).toLong())
+        dbHelper.insertSlope(slopeObj)
+
+        resetValues()
+    }
+
 
     // Creates a lazy vertical grid of icons with 5 columns.
     LazyVerticalGridWithIcons(
@@ -464,6 +563,11 @@ fun GridLayout() {
     }
 }
 
+fun displaySlopeCard(slope: Slope){
+    isCardDisplayed = true
+    currentDisplayedCard = slope
+}
+
 fun calculateGradient(heightDifference: Double, horizontalDistance: Double): Pair<Double, Double> {
     if (horizontalDistance == 0.0) {
         throw IllegalArgumentException("Horizontale Entfernung kann nicht 0 sein.")
@@ -476,11 +580,6 @@ fun calculateGradient(heightDifference: Double, horizontalDistance: Double): Pai
 fun onSettingsButtonClick() {
     TODO("Not yet implemented")
 }
-
-fun onSaveButtonClick() {
-    TODO("Not yet implemented")
-}
-
 
 fun formatElapsedTime(elapsedTime: Long): String {
     val seconds = (elapsedTime / 1000) % 60
@@ -530,10 +629,10 @@ fun MyPopupDialog(
                     //Spacer(modifier = Modifier.height(16.dp))
 
                     // Inhalte zentriert in der Column
-                    TextItem(label = "Latitude", value = Latitude)
-                    TextItem(label = "Longtitude", value = Longtitude)
-                    TextItem(label = "Altitude", value = Altitude + "m")
-                    TextItem(label = "Timestamp", value = Timestamp)
+                    TextItem(label = "latitude", value = latitude)
+                    TextItem(label = "longtitude", value = longtitude)
+                    TextItem(label = "Altitude", value = altitude + "m")
+                    TextItem(label = "timestamp", value = timestamp)
                     TextItem(label = "Vertical Accuracy", value = "± 12 m")
                     TextItem(label = "Horizontal Accuracy", value = "± 35 m")
                 }

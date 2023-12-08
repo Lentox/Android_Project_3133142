@@ -35,16 +35,16 @@ class LocationManager(private val activity: Activity) {
             for (location in p0.locations) {
                 // Process each location in the result.
                 println("Lat: " + location.latitude + " Long: " + location.longitude + " Alt: " + location.altitude + " Zeit: " + SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date()))
-                Latitude = location.latitude.toString()
-                Longtitude = location.longitude.toString()
-                Timestamp = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
+                latitude = location.latitude.toString()
+                longtitude = location.longitude.toString()
+                timestamp = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
                 val weatherService = WeatherService()
                 weatherService.getWeather(location.latitude, location.longitude)
 
                 // Distance Calculation
                 if (lastLongitude != 0.0 && lastLatitude != 0.0){
-                    val distance = calculateDistance(lastLatitude, lastLongitude, location.latitude, location.longitude)
-                    Distance = round(distance).toInt().toString()
+                    val distanceTemp = calculateDistance(lastLatitude, lastLongitude, location.latitude, location.longitude)
+                    distance = round(distanceTemp).toInt().toString()
                 }else{
                     // If there is no last Location
                     lastLongitude = location.longitude

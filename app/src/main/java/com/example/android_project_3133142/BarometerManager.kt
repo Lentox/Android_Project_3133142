@@ -44,8 +44,8 @@ class BarometerManager(private val activity: Activity) : SensorEventListener {
                 lastUpdate = currentTime
                 currentPressure = event.values[0] // Update the current pressure reading.
                 // Calculate and update the altitude based on the current pressure.
-                val altitude = SensorManager.getAltitude(SensorManager.PRESSURE_STANDARD_ATMOSPHERE, currentPressure)
-                Altitude = altitude.toString()
+                val altitudeTemp = SensorManager.getAltitude(SensorManager.PRESSURE_STANDARD_ATMOSPHERE, currentPressure)
+                altitude = altitudeTemp.toString()
             }
         }
     }
