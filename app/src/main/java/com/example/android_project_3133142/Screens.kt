@@ -25,11 +25,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.util.Locale
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 
+var statistics = mutableListOf<Statistic>()
 
 // Composable function for the Home Screen.
 @Composable
@@ -136,6 +137,9 @@ fun SlopesScreen(navController: NavHostController) {
 // Composable function for the Profile Screen.
 @Composable
 fun ProfileScreen() {
+    // MutableState variable für die Statistik
+
+
     // Column layout for the profile screen.
     Column(
         modifier = Modifier
@@ -157,13 +161,33 @@ fun ProfileScreen() {
             fontSize = 30.sp,
             fontFamily = FontFamily.SansSerif
         )
-        // Statistics data for the profile screen.
-        val statistics = listOf(
-            Statistic("Overall Max Speed", "120 km/h", Icons.Default.Speed),
-            Statistic("Overall Distance", "1265 km", Icons.Default.DownhillSkiing),
-            Statistic("Overall Max Height", "3565 m", Icons.Default.Height)
-        )
+
         // Displaying a view with profile statistics.
         ProfileStatisticsView(statistics)
     }
+}
+
+fun reCalcStatistic(){
+
+    var overallMaxSpeed = 0
+    var overallDistance = 0
+    var overallMaxHeight = 0
+
+    for (slope in slopesArray){
+
+        if (overallMaxHeight < slope.altitude.max)
+            overallMaxHeight = slope.altitude.max
+
+        overallDistance += slope.distance
+
+        if (overallMaxSpeed < slope.maxVelocity)
+            overallMaxSpeed = slope.maxVelocity
+
+    }
+
+    statistics = mutableListOf(
+        Statistic("Overall Max Speed", "$overallMaxSpeed km/h", Icons.Default.Speed),
+        Statistic("Overall Distance", "$overallDistance km", Icons.Default.DownhillSkiing),
+        Statistic("Overall Max Height", "$overallMaxHeight m", Icons.Default.Height)
+    )
 }

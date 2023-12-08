@@ -307,8 +307,8 @@ fun GridLayout() {
     val item = listOf(
         "Max. Velocity",
         "Avg. Velocity",
-        "distance",
-        "altitude"
+        "Distance",
+        "Altitude"
     )
 
     // Creates a lazy vertical grid with 2 columns using the above items and values.
@@ -505,6 +505,7 @@ fun GridLayout() {
                     slopesArray.remove(slope)
                 }
             }
+            reCalcStatistic()
             resetValues()
         }else{
             // Delete current track
@@ -536,6 +537,8 @@ fun GridLayout() {
         slopesArray.add(slopeObj)
         println("Saved Index: " + (slopesArray.size).toLong())
         dbHelper.insertSlope(slopeObj)
+
+        reCalcStatistic()
 
         resetValues()
     }

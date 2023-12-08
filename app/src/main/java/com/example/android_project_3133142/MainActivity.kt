@@ -85,6 +85,7 @@ class MainActivity : ComponentActivity() {
     private fun readSlopes(){
 
         slopesArray = dbHelper.getAllSlopes().toMutableList()
+        reCalcStatistic()
 
     }
 }

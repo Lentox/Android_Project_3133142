@@ -52,7 +52,6 @@ fun StatisticBox(statistic: Statistic) {
                 contentDescription = "Statistic Icon",
                 modifier = Modifier.size(24.dp) // Sets the size of the icon.
             )
-            Spacer(modifier = Modifier.width(8.dp)) // Spacer for horizontal spacing.
             // Column layout to arrange texts vertically.
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally, // Centers children horizontally.
