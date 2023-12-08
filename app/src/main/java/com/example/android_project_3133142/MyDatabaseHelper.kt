@@ -48,7 +48,7 @@ class MyDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NA
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
-        // Hier können Sie Aktualisierungslogik hinzufügen, falls nötig
+
     }
 
     fun insertSlope(slope: Slope): Long? {

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -48,7 +49,7 @@ fun StatisticBox(statistic: Statistic) {
             // Icon representing the statistic.
             Icon(
                 imageVector = statistic.icon,
-                contentDescription = "Statistik Icon",
+                contentDescription = "Statistic Icon",
                 modifier = Modifier.size(24.dp) // Sets the size of the icon.
             )
             Spacer(modifier = Modifier.width(8.dp)) // Spacer for horizontal spacing.
@@ -68,6 +69,7 @@ fun StatisticBox(statistic: Statistic) {
                     text = statistic.value,
                     textAlign = TextAlign.Center // Text aligned to center.
                 )
+                Spacer(modifier = Modifier.height(8.dp)) // Spacer for horizontal spacing.
             }
         }
     }
@@ -83,7 +85,7 @@ fun ProfileStatisticsView(statistics: List<Statistic>) {
             .padding(16.dp) // Padding around the box.
             .clip(RoundedCornerShape(12.dp)) // Rounded corners for the box.
             .background(Color.White.copy(alpha = 0.8f)) // Semi-transparent white background.
-            .padding(16.dp) // Additional padding inside the box.
+            .padding(8.dp) // Additional padding inside the box.
     ) {
         // Column layout to arrange statistic boxes vertically.
         Column(
