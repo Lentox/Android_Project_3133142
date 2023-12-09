@@ -37,6 +37,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -45,6 +46,7 @@ import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -54,6 +56,12 @@ import java.util.Timer
 import java.util.TimerTask
 import kotlin.math.atan
 import kotlin.math.round
+import android.graphics.PointF
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.ui.graphics.*
+import androidx.compose.ui.platform.LocalDensity
+import kotlin.random.Random
+
 
 var latitude = "-6.278581"
 var longtitude = "-6.278581"
@@ -77,6 +85,8 @@ var gradient = 0
 
 var isCardDisplayed = false
 var currentDisplayedCard: Slope? = null
+
+var graphPoints = listOf(0f)
 
 var slopesArray = mutableListOf<Slope>(
     Slope(
@@ -146,7 +156,7 @@ fun GridLayout() {
                             if (((item == 0 || item == 2 || item == 4) && !play && !trackOnGoing && !isCardDisplayed)
                                 || ((item == 0 || item == 2 || item == 4) && trackOnGoing && !isCardDisplayed)
                                 || ((item == 1 || item == 3) && trackOnGoing && !play && !isCardDisplayed)
-                                || ((item == 0 || item == 1 || item == 2)  && isCardDisplayed)
+                                || ((item == 0 || item == 1 || item == 2) && isCardDisplayed)
                             )
                                 colorResource(id = R.color.boxBackground) else Color.Gray, // Hintergrundfarbe des Elements.
                             shape = RoundedCornerShape(25) // Abgerundete Ecken für das Element.
@@ -155,7 +165,7 @@ fun GridLayout() {
                             if (((item == 0 || item == 2 || item == 4) && !play && !trackOnGoing && !isCardDisplayed)
                                 || ((item == 0 || item == 2 || item == 4) && trackOnGoing && !isCardDisplayed)
                                 || ((item == 1 || item == 3) && trackOnGoing && !play && !isCardDisplayed)
-                                || ((item == 0 || item == 1 || item == 2)  && isCardDisplayed)
+                                || ((item == 0 || item == 1 || item == 2) && isCardDisplayed)
                             )
                                 Modifier.clickable { onIconClick(item) } else Modifier
                         )
@@ -291,10 +301,7 @@ fun GridLayout() {
                                 .height(130.dp)
                         ){
                             Column {
-                                GraphWithHeightAndTimeAxes(
-                                    heights = listOf(10f, 2.5f, 1.8f, 3.0f,10f, 2.5f, 1.8f, 3.0f,10f, 2.5f, 1.8f, 3.0f),
-                                    timestamps = listOf("0", "5", "10", "15", "20", "25", "30")
-                                )
+                                LineChartScreen()
                             }
                         }
                     }
@@ -535,7 +542,7 @@ fun GridLayout() {
             date = formattedDate
         )
         slopesArray.add(slopeObj)
-        println("Saved Index: " + (slopesArray.size).toLong())
+
         dbHelper.insertSlope(slopeObj)
 
         reCalcStatistic()
@@ -661,70 +668,113 @@ fun TextItem(label: String, value: String) {
     }
 }
 
-
 @Composable
-fun GraphWithHeightAndTimeAxes(heights: List<Float>, timestamps: List<String>) {
-    Canvas(modifier = Modifier
-        .fillMaxWidth()
-        .height(150.dp)
-        .padding(16.dp)) {
-
-        val axisPaint = Paint().apply {
-            textSize = 30f
+fun Graph(
+    modifier : Modifier,
+    xValues: List<Int>,
+    yValues: List<Int>,
+    points: List<Float>,
+    paddingSpace: Dp,
+    verticalStep: Int
+) {
+    val controlPoints1 = mutableListOf<PointF>()
+    val controlPoints2 = mutableListOf<PointF>()
+    val coordinates = mutableListOf<PointF>()
+    val density = LocalDensity.current
+    val textPaint = remember(density) {
+        Paint().apply {
+            color = android.graphics.Color.BLACK
+            textAlign = Paint.Align.CENTER
+            textSize = density.run { 12.sp.toPx() }
         }
+    }
 
-        // Zeichnen der X-Achse
-        drawLine(
-            color = Color.Black,
-            start = Offset(40f, size.height - 40f),
-            end = Offset(size.width, size.height - 40f),
-            strokeWidth = Stroke.DefaultMiter
-        )
-
-        // Zeichnen der Y-Achse
-        drawLine(
-            color = Color.Black,
-            start = Offset(40f, 0f),
-            end = Offset(40f, size.height - 40f),
-            strokeWidth = Stroke.DefaultMiter
-        )
-
-        // Berechnung der Schritte für X- und Y-Achse
-        val stepX = (size.width - 40f) / (timestamps.size - 1)
-        val maxHeight = heights.maxOrNull() ?: 1f
-        val stepY = (size.height - 40f) / maxHeight
-
-        // Zeichnen der Datenpunkte und Verbindungslinien
-        var previousPoint = Offset(40f, size.height - 40f - (heights.first() * stepY))
-        heights.zip(timestamps).forEachIndexed { index, (height, _) ->
-            val x = 40f + stepX * index
-            val y = size.height - 40f - (height * stepY)
-            val currentPoint = Offset(x, y)
-
-            // Zeichnen der Verbindungslinie
-            if (index > 0) {
-                drawLine(
-                    start = previousPoint,
-                    end = currentPoint,
-                    color = Color.Blue,
-                    strokeWidth = 5f
+    Box(
+        modifier = modifier
+            .background(
+                colorResource(id = R.color.boxBackground)
+            )
+            .padding(horizontal = 8.dp, vertical = 12.dp),
+        contentAlignment = Center
+    ) {
+        Canvas(
+            modifier = Modifier.fillMaxSize(),
+        ) {
+            val xAxisSpace = (size.width - paddingSpace.toPx()) / xValues.size
+            val yAxisSpace = size.height / yValues.size
+            /** placing x axis points */
+            for (i in xValues.indices) {
+                drawContext.canvas.nativeCanvas.drawText(
+                    "${xValues[i]}",
+                    xAxisSpace * (i + 1),
+                    size.height - 30,
+                    textPaint
                 )
             }
-            previousPoint = currentPoint
-
-            // Hier passen wir den Abstand der Texte an
-            val textOffsetY = y - axisPaint.textSize * index // Multiplizieren Sie den Index mit der Textgröße, um den Abstand zu erhöhen
-
-            // Zeichnen der Beschriftungen
-            drawContext.canvas.nativeCanvas.apply {
-                // X-Achse (Zeitstempel)
-                drawText(timestamps[index], x - axisPaint.textSize / 2, size.height - 10f, axisPaint)
-                // Y-Achse (Höhe)
-                if (index == 0){
-                    drawText(height.toString(), -30f, y + axisPaint.textSize / 2, axisPaint)
-                    drawText((height / 2).toString(), -30f, y + 125, axisPaint)
+            /** placing y axis points */
+            for (i in yValues.indices) {
+                drawContext.canvas.nativeCanvas.drawText(
+                    "${yValues[i]}",
+                    paddingSpace.toPx() / 2f,
+                    size.height - yAxisSpace * (i + 1),
+                    textPaint
+                )
+            }
+            /** placing our x axis points */
+            for (i in points.indices) {
+                val x1 = xAxisSpace * xValues[i]
+                val y1 = size.height - (yAxisSpace * (points[i]/verticalStep.toFloat()))
+                coordinates.add(PointF(x1,y1))
+                /** drawing circles to indicate all the points */
+                drawCircle(
+                    color = Color.Red,
+                    radius = 10f,
+                    center = Offset(x1,y1)
+                )
+            }
+            /** calculating the connection points */
+            for (i in 1 until coordinates.size) {
+                controlPoints1.add(PointF((coordinates[i].x + coordinates[i - 1].x) / 2, coordinates[i - 1].y))
+                controlPoints2.add(PointF((coordinates[i].x + coordinates[i - 1].x) / 2, coordinates[i].y))
+            }
+            /** drawing the path */
+            val stroke = Path().apply {
+                reset()
+                moveTo(coordinates.first().x, coordinates.first().y)
+                for (i in 0 until coordinates.size - 1) {
+                    cubicTo(
+                        controlPoints1[i].x,controlPoints1[i].y,
+                        controlPoints2[i].x,controlPoints2[i].y,
+                        coordinates[i + 1].x,coordinates[i + 1].y
+                    )
                 }
             }
+            /** filling the area under the path */
+            val fillPath = android.graphics.Path(stroke.asAndroidPath())
+                .asComposePath()
+                .apply {
+                    lineTo(xAxisSpace * xValues.last(), size.height - yAxisSpace)
+                    lineTo(xAxisSpace, size.height - yAxisSpace)
+                    close()
+                }
+            drawPath(
+                fillPath,
+                brush = Brush.verticalGradient(
+                    listOf(
+                        Color.Cyan,
+                        Color.Transparent,
+                    ),
+                    endY = size.height - yAxisSpace
+                ),
+            )
+            drawPath(
+                stroke,
+                color = Color.Black,
+                style = Stroke(
+                    width = 5f,
+                    cap = StrokeCap.Round
+                )
+            )
         }
     }
 }

@@ -79,5 +79,5 @@ dependencies {
     implementation ("io.coil-kt:coil-compose:1.3.2")
     implementation ("androidx.room:room-runtime:2.3.0")
     implementation ("androidx.room:room-ktx:2.3.0") // Für Kotlin-Unterstützung
-
+    implementation("co.yml:ycharts:2.1.0")
 }
