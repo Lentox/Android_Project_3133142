@@ -1,8 +1,6 @@
 package com.example.android_project_3133142
 
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.MaterialTheme
@@ -13,7 +11,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import co.yml.charts.axis.AxisData
-import co.yml.charts.axis.Gravity
 import co.yml.charts.common.model.Point
 import co.yml.charts.ui.linechart.LineChart
 import co.yml.charts.ui.linechart.model.GridLines
@@ -26,17 +23,19 @@ import co.yml.charts.ui.linechart.model.LineType
 import co.yml.charts.ui.linechart.model.SelectionHighlightPoint
 import co.yml.charts.ui.linechart.model.SelectionHighlightPopUp
 import co.yml.charts.ui.linechart.model.ShadowUnderLine
+import kotlin.math.roundToInt
 
 @Composable
-fun LineChartScreen(){
+fun LineChartScreen(pointsData: List<Point>){
+
     val steps = 5
-    val pointsData = listOf(
-        Point(0f, 40f),
-        Point(1f, 90f),
-        Point(2f, 0f),
-        Point(3f, 60f),
-        Point(4f, 10f),
-    )
+
+    var maxValue = 0f
+
+    for (point in pointsData){
+        if (point.y > maxValue)
+            maxValue = point.y
+    }
 
     val xAxisData = AxisData.Builder()
         .axisStepSize(100.dp)
@@ -53,7 +52,7 @@ fun LineChartScreen(){
         .backgroundColor(colorResource(id = R.color.boxBackground))
         .labelAndAxisLinePadding(30.dp)
         .labelData { i ->
-            val yScale = 100 / steps
+            val yScale = maxValue.roundToInt() / steps
             (i * yScale).toString()
         }
         .axisLineColor(colorResource(id = R.color.tagBackground))
@@ -109,4 +108,8 @@ fun LineChartScreen(){
         ,
         lineChartData = lineChartData
     )
+}
+
+fun reDrawLineChart(){
+
 }

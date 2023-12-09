@@ -60,6 +60,7 @@ import android.graphics.PointF
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.platform.LocalDensity
+import co.yml.charts.common.model.Point
 import kotlin.random.Random
 
 
@@ -85,8 +86,6 @@ var gradient = 0
 
 var isCardDisplayed = false
 var currentDisplayedCard: Slope? = null
-
-var graphPoints = listOf(0f)
 
 var slopesArray = mutableListOf<Slope>(
     Slope(
@@ -123,6 +122,8 @@ fun GridLayout() {
     var values by remember { mutableStateOf(listOf("0 km/h", "0 km/h", "\n0 km\n\n", "Max 0m\nMin 0m\nDelta 0m\n")) }
 
     val dbHelper = MyDatabaseHelper(context = LocalContext.current)
+
+    var pointsData by remember { mutableStateOf(listOf(Point(1f, altitude.toFloat()))) }
 
     var icon = remember {
         mutableStateListOf(
@@ -301,7 +302,7 @@ fun GridLayout() {
                                 .height(130.dp)
                         ){
                             Column {
-                                LineChartScreen()
+                                LineChartScreen(pointsData)
                             }
                         }
                     }
@@ -446,9 +447,10 @@ fun GridLayout() {
                             gradient = gradientPerc
                         }
                         oldAltitude = round(altitude.toDouble()).toInt()
-                    }
 
-                    //altitudeValues.add(round(altitude.toDouble()).toInt().toString())
+                        //pointsData.add(Point((pointsData.size + 1).toFloat(), altitude.toFloat()))
+                        pointsData += Point((pointsData.size + 1).toFloat(), altitude.toFloat())
+                    }
                 }
             }, 0, 1000) // Aktualisierung jede Sekunde
             isStopwatchRunning = true
@@ -665,116 +667,5 @@ fun TextItem(label: String, value: String) {
             text = value,
             style = MaterialTheme.typography.bodyMedium
         )
-    }
-}
-
-@Composable
-fun Graph(
-    modifier : Modifier,
-    xValues: List<Int>,
-    yValues: List<Int>,
-    points: List<Float>,
-    paddingSpace: Dp,
-    verticalStep: Int
-) {
-    val controlPoints1 = mutableListOf<PointF>()
-    val controlPoints2 = mutableListOf<PointF>()
-    val coordinates = mutableListOf<PointF>()
-    val density = LocalDensity.current
-    val textPaint = remember(density) {
-        Paint().apply {
-            color = android.graphics.Color.BLACK
-            textAlign = Paint.Align.CENTER
-            textSize = density.run { 12.sp.toPx() }
-        }
-    }
-
-    Box(
-        modifier = modifier
-            .background(
-                colorResource(id = R.color.boxBackground)
-            )
-            .padding(horizontal = 8.dp, vertical = 12.dp),
-        contentAlignment = Center
-    ) {
-        Canvas(
-            modifier = Modifier.fillMaxSize(),
-        ) {
-            val xAxisSpace = (size.width - paddingSpace.toPx()) / xValues.size
-            val yAxisSpace = size.height / yValues.size
-            /** placing x axis points */
-            for (i in xValues.indices) {
-                drawContext.canvas.nativeCanvas.drawText(
-                    "${xValues[i]}",
-                    xAxisSpace * (i + 1),
-                    size.height - 30,
-                    textPaint
-                )
-            }
-            /** placing y axis points */
-            for (i in yValues.indices) {
-                drawContext.canvas.nativeCanvas.drawText(
-                    "${yValues[i]}",
-                    paddingSpace.toPx() / 2f,
-                    size.height - yAxisSpace * (i + 1),
-                    textPaint
-                )
-            }
-            /** placing our x axis points */
-            for (i in points.indices) {
-                val x1 = xAxisSpace * xValues[i]
-                val y1 = size.height - (yAxisSpace * (points[i]/verticalStep.toFloat()))
-                coordinates.add(PointF(x1,y1))
-                /** drawing circles to indicate all the points */
-                drawCircle(
-                    color = Color.Red,
-                    radius = 10f,
-                    center = Offset(x1,y1)
-                )
-            }
-            /** calculating the connection points */
-            for (i in 1 until coordinates.size) {
-                controlPoints1.add(PointF((coordinates[i].x + coordinates[i - 1].x) / 2, coordinates[i - 1].y))
-                controlPoints2.add(PointF((coordinates[i].x + coordinates[i - 1].x) / 2, coordinates[i].y))
-            }
-            /** drawing the path */
-            val stroke = Path().apply {
-                reset()
-                moveTo(coordinates.first().x, coordinates.first().y)
-                for (i in 0 until coordinates.size - 1) {
-                    cubicTo(
-                        controlPoints1[i].x,controlPoints1[i].y,
-                        controlPoints2[i].x,controlPoints2[i].y,
-                        coordinates[i + 1].x,coordinates[i + 1].y
-                    )
-                }
-            }
-            /** filling the area under the path */
-            val fillPath = android.graphics.Path(stroke.asAndroidPath())
-                .asComposePath()
-                .apply {
-                    lineTo(xAxisSpace * xValues.last(), size.height - yAxisSpace)
-                    lineTo(xAxisSpace, size.height - yAxisSpace)
-                    close()
-                }
-            drawPath(
-                fillPath,
-                brush = Brush.verticalGradient(
-                    listOf(
-                        Color.Cyan,
-                        Color.Transparent,
-                    ),
-                    endY = size.height - yAxisSpace
-                ),
-            )
-            drawPath(
-                stroke,
-                color = Color.Black,
-                style = Stroke(
-                    width = 5f,
-                    cap = StrokeCap.Round
-                )
-            )
-        }
     }
 }
