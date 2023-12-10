@@ -34,6 +34,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.android_project_3133142.R
+import com.example.android_project_3133142.Ubuntu
 
 // Composable function to display a scrollable list of cards.
 @Composable
@@ -88,7 +89,8 @@ fun ScrollableCardList(items: List<CardData>, onIconClick: (Int) -> Unit) {
                                 modifier = Modifier
                                     .padding(6.dp), // Padding inside the text box.
                                 text = item.location,
-                                color = Color.White // Text color.
+                                color = Color.White, // Text color.
+                                fontFamily = Ubuntu
                             )
                         }
                         // Iterating over the details list to display icon and text pairs.
@@ -103,14 +105,18 @@ fun ScrollableCardList(items: List<CardData>, onIconClick: (Int) -> Unit) {
                                 )
                                 Spacer(modifier = Modifier.width(4.dp)) // Spacer for horizontal spacing.
                                 // Text corresponding to the icon.
-                                Text(text = detail.text)
+                                Text(
+                                    text = detail.text,
+                                    fontFamily = Ubuntu
+                                )
                             }
                         }
                         // Text displaying the date.
                         Text(
                             text = item.date,
                             color = Color.Gray, // Text color.
-                            style = MaterialTheme.typography.titleSmall // Text style.
+                            style = MaterialTheme.typography.titleSmall, // Text style.
+                            fontFamily = Ubuntu
                         )
                     }
                     Spacer(modifier = Modifier.width(8.dp)) // Spacer for horizontal spacing.

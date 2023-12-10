@@ -10,4 +10,8 @@
     <color name="navBackground">#70FFFFFF</color>
     <color name="boxBackground">#E7E0EC</color>
     <color name="tagBackground">#335291</color>
+    <color name="header">#000069</color>
+    <color name="homeFontColor">#3C3C39</color>
+    <color name="navFontColor">#3C3C39</color>
+    <color name="trackValueFontColor">#3C3C39</color>
 </resources>

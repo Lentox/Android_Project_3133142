@@ -21,12 +21,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
+import com.example.android_project_3133142.R
+import com.example.android_project_3133142.Ubuntu
 import com.example.android_project_3133142.manager.WeatherService
 import com.example.android_project_3133142.manager.weatherDataAPI
 import java.time.LocalDate
@@ -51,25 +53,29 @@ fun WeatherDisplay() {
             contentDescription = "Current weather", // Accessibility description.
             modifier = Modifier.size(100.dp) // Sets the size of the icon.
         )
+        Spacer(modifier = Modifier.height(25.dp)) // Vertical spacer.
         Text(
             weatherDataAPI?.location ?: "Loading...",
             fontWeight = FontWeight.Bold, // Bold font weight for emphasis.
             fontSize = 30.sp, // Font size.
-            fontFamily = FontFamily.SansSerif // Font family.
+            fontFamily = Ubuntu, // Font family.
+            color = colorResource(id = R.color.homeFontColor)
         )
         // Text displaying the current temperature.
         Text(
             "${weatherDataAPI?.temp ?: "Loading..."}°",
             fontWeight = FontWeight.Bold, // Bold font weight for emphasis.
             fontSize = 30.sp, // Font size.
-            fontFamily = FontFamily.SansSerif // Font family.
+            fontFamily = Ubuntu, // Font family.
+            color = colorResource(id = R.color.homeFontColor)
         )
 
         Text(
             weatherDataAPI?.conditionText ?: "Loading...",
             fontSize = 19.sp, // Font size.
-            fontFamily = FontFamily.SansSerif, // Font family.
-            fontWeight = FontWeight.SemiBold
+            fontFamily = Ubuntu, // Font family.
+            fontWeight = FontWeight.SemiBold,
+            color = colorResource(id = R.color.homeFontColor)
         )
 
         // Row layout for displaying maximum and minimum temperature.
@@ -78,16 +84,19 @@ fun WeatherDisplay() {
             Text(
                 "Max: ${weatherDataAPI?.maxTemp ?: "Loading..."}°",
                 fontSize = 19.sp, // Font size.
-                fontFamily = FontFamily.SansSerif, // Font family.
-                fontWeight = FontWeight.SemiBold // Font family.
+                fontFamily = Ubuntu, // Font family.
+                fontWeight = FontWeight.SemiBold, // Font family.
+                color = colorResource(id = R.color.homeFontColor)
             )
             Spacer(modifier = Modifier.width(16.dp)) // Horizontal spacer.
+
             // Text for minimum temperature.
             Text(
                 "Min: ${weatherDataAPI?.minTemp ?: "Loading..."}°",
                 fontSize = 19.sp, // Font size.
-                fontFamily = FontFamily.SansSerif, // Font family.
-                fontWeight = FontWeight.SemiBold
+                fontFamily = Ubuntu, // Font family.
+                fontWeight = FontWeight.SemiBold,
+                color = colorResource(id = R.color.homeFontColor)
             )
         }
 
@@ -130,15 +139,17 @@ fun TransparentBoxWithHourlyForecast(hourlyForecast: MutableList<WeatherService.
                 Text(
                     "Today",
                     style = MaterialTheme.typography.bodyMedium,
-                    fontFamily = FontFamily.SansSerif,
-                    fontWeight = FontWeight.Bold // Font family.
+                    fontFamily = Ubuntu,
+                    fontWeight = FontWeight.Bold, // Font family.
+                    color = colorResource(id = R.color.homeFontColor)
                     ) // "Today" label.
                 Spacer(modifier = Modifier.width(110.dp)) // Horizontal spacer.
                 Text(
                     currentDate,
                     style = MaterialTheme.typography.bodyMedium,
-                    fontFamily = FontFamily.SansSerif,
-                    fontWeight = FontWeight.Bold
+                    fontFamily = Ubuntu,
+                    fontWeight = FontWeight.Bold,
+                    color = colorResource(id = R.color.homeFontColor)
                     )
             }
 
@@ -171,8 +182,9 @@ fun HourlyWeatherDisplay(forecast: WeatherService.HourlyForecast) {
 
             text = "${forecast.temp}°",
             style = MaterialTheme.typography.bodyMedium, // Text style.
-            fontFamily = FontFamily.SansSerif,
-            fontWeight = FontWeight.Bold // Font family.
+            fontFamily = Ubuntu,
+            fontWeight = FontWeight.Bold, // Font family.
+            color = colorResource(id = R.color.homeFontColor)
         )
         Spacer(modifier = Modifier.height(5.dp)) // Vertical spacer.
         // Icon representing the weather.
@@ -189,22 +201,25 @@ fun HourlyWeatherDisplay(forecast: WeatherService.HourlyForecast) {
                 text = "Now",
                 style = MaterialTheme.typography.bodyMedium, // Text style.
                 //fontSize = 19.sp, // Font size.
-                fontFamily = FontFamily.SansSerif,
-                fontWeight = FontWeight.Bold // Font family.
+                fontFamily = Ubuntu,
+                fontWeight = FontWeight.Bold, // Font family.
+                color = colorResource(id = R.color.homeFontColor)
             )
         }else if(forecast.hour < 10){
             Text(
                 text = "0" + forecast.hour.toString() + ":00",
                 style = MaterialTheme.typography.bodyMedium, // Text style.
-                fontFamily = FontFamily.SansSerif,
-                fontWeight = FontWeight.Bold // Font family.
+                fontFamily = Ubuntu,
+                fontWeight = FontWeight.Bold, // Font family.
+                color = colorResource(id = R.color.homeFontColor)
             )
         }else{
             Text(
                 text = forecast.hour.toString() + ":00",
                 style = MaterialTheme.typography.bodyMedium,
-                fontFamily = FontFamily.SansSerif,
-                fontWeight = FontWeight.Bold // Font family.
+                fontFamily = Ubuntu,
+                fontWeight = FontWeight.Bold, // Font family.
+                color = colorResource(id = R.color.homeFontColor)
             )
         }
     }

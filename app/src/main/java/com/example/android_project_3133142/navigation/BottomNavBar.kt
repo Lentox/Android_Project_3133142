@@ -18,6 +18,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.android_project_3133142.R
+import com.example.android_project_3133142.Ubuntu
 
 // NavigationBottomBar of the App.
 @Composable
@@ -50,7 +51,10 @@ fun BottomBar(
             NavigationBarItem(
                 // Label for the navigation item, showing the title of the screen.
                 label = {
-                    Text(text = screen.title!!)
+                    Text(
+                        text = screen.title!!,
+                        fontFamily = Ubuntu
+                    )
                 },
                 // Icon for the navigation item.
                 icon = {

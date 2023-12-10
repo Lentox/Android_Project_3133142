@@ -18,7 +18,6 @@ import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -28,6 +27,7 @@ import androidx.navigation.NavHostController
 import com.example.android_project_3133142.controller.displaySlopeCard
 import com.example.android_project_3133142.navigation.Destinations
 import com.example.android_project_3133142.R
+import com.example.android_project_3133142.Ubuntu
 import com.example.android_project_3133142.slopesArray
 
 var statistics = mutableListOf<Statistic>()
@@ -70,7 +70,7 @@ fun TrackScreen() {
             color = Color.White,
             fontWeight = FontWeight.Bold,
             fontSize = 30.sp,
-            fontFamily = FontFamily.SansSerif
+            fontFamily = Ubuntu
         )
         // Calls the GridLayout function to display a grid layout.
         GridLayout()
@@ -101,7 +101,7 @@ fun SlopesScreen(navController: NavHostController) {
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.Bold,
             fontSize = 30.sp,
-            fontFamily = FontFamily.SansSerif
+            fontFamily = Ubuntu
         )
 
         val exampleData = mutableListOf<CardData>()
@@ -156,7 +156,7 @@ fun ProfileScreen() {
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.Bold,
             fontSize = 30.sp,
-            fontFamily = FontFamily.SansSerif
+            fontFamily = Ubuntu
         )
 
         // Displaying a view with profile statistics.

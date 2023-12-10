@@ -6,8 +6,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -43,6 +45,7 @@ import java.util.TimerTask
 import kotlin.math.round
 import androidx.compose.ui.graphics.*
 import co.yml.charts.common.model.Point
+import com.example.android_project_3133142.Ubuntu
 import com.example.android_project_3133142.objects.Altitude
 import com.example.android_project_3133142.manager.MyDatabaseHelper
 import com.example.android_project_3133142.objects.Slope
@@ -390,7 +393,8 @@ fun MyPopupDialog(
                     Text(
                         "Position",
                         style = MaterialTheme.typography.titleSmall,
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f),
+                        fontFamily = Ubuntu
                     )
                     IconButton(onClick = onDismiss) {
                         Icon(Icons.Default.Close, contentDescription = "Close")
@@ -421,11 +425,14 @@ fun TextItem(label: String, value: String) {
         Text(
             text = label,
             style = MaterialTheme.typography.titleMedium,
-            color = Color.Gray
+            color = Color.Gray,
+            fontFamily = Ubuntu
         )
         Text(
             text = value,
-            style = MaterialTheme.typography.bodyMedium
+            style = MaterialTheme.typography.bodyMedium,
+            fontFamily = Ubuntu
         )
+        Spacer(modifier = Modifier.height(8.dp)) // Spacer for vertical spacing.
     }
 }

@@ -19,9 +19,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.android_project_3133142.R
+import com.example.android_project_3133142.Ubuntu
 
 // Data class representing a statistic, consisting of a label, a value, and an icon.
 data class Statistic(
@@ -59,15 +63,20 @@ fun StatisticBox(statistic: Statistic) {
                 // Text showing the label of the statistic.
                 Text(
                     text = statistic.label,
+                    color = colorResource(id = R.color.tagBackground),
                     fontWeight = FontWeight.Bold, // Bold font weight.
-                    textAlign = TextAlign.Center // Text aligned to center.
+                    textAlign = TextAlign.Center, // Text aligned to center.
+                    fontSize = 17.sp,
+                    fontFamily = Ubuntu
                 )
                 // Text showing the value of the statistic.
                 Text(
                     text = statistic.value,
-                    textAlign = TextAlign.Center // Text aligned to center.
+                    textAlign = TextAlign.Center, // Text aligned to center.
+                    fontSize = 15.sp,
+                    fontFamily = Ubuntu
                 )
-                Spacer(modifier = Modifier.height(8.dp)) // Spacer for horizontal spacing.
+                Spacer(modifier = Modifier.height(6.dp)) // Spacer for horizontal spacing.
             }
         }
     }

@@ -1,15 +1,17 @@
 package com.example.android_project_3133142
 
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import co.yml.charts.common.model.Point
 import com.example.android_project_3133142.objects.Altitude
 import com.example.android_project_3133142.objects.Slope
 import java.util.Timer
 
 // Global variables
-var latitude = "-6.278581"
-var longitude = "-6.278581"
-var altitude = "23"
-var timestamp = "2023-11-19 20:03:42 +0000"
+var latitude = "0.0"
+var longitude = "0.0"
+var altitude = "0"
+var timestamp = "2023-01-01 00:00:00 +0000"
 var distance = "0"
 
 var isStopwatchRunning = false
@@ -43,4 +45,8 @@ var slopesArray = mutableListOf(
         date = "October 30, 2023",
         listOf(Point(1f, altitude.toFloat()))
     )
+)
+
+val Ubuntu = FontFamily(
+    Font(R.font.ubuntub),
 )

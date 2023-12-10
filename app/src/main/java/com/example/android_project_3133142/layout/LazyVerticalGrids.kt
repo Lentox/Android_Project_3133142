@@ -20,10 +20,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import co.yml.charts.common.model.Point
 import com.example.android_project_3133142.R
+import com.example.android_project_3133142.Ubuntu
 import com.example.android_project_3133142.currentDisplayedCard
 import com.example.android_project_3133142.isCardDisplayed
 
@@ -52,8 +54,8 @@ fun LazyVerticalGridWithIcons(
                             || ((item == 1 || item == 3) && trackOnGoing && !play && !isCardDisplayed)
                             || ((item == 0 || item == 1 || item == 2) && isCardDisplayed)
                         )
-                            colorResource(id = R.color.boxBackground) else Color.Gray, // Hintergrundfarbe des Elements.
-                        shape = RoundedCornerShape(25) // Abgerundete Ecken für das Element.
+                            colorResource(id = R.color.boxBackground) else Color.Gray, // Background color of the element.
+                        shape = RoundedCornerShape(25) // Rounded corners for the element.
                     )
                     .then(
                         if (((item == 0 || item == 2 || item == 4) && !play && !trackOnGoing && !isCardDisplayed)
@@ -122,7 +124,8 @@ fun LazyVerticalGridWithItems(
                         Text(
                             text = items[item], // Label text.
                             color = Color.White, // Text color.
-                            fontSize = 20.sp // Text size.
+                            fontSize = 19.sp, // Text size.
+                            fontFamily = Ubuntu
                         )
                     }
 
@@ -133,8 +136,10 @@ fun LazyVerticalGridWithItems(
                     ){
                         Text(
                             text = values[item], // Value text.
-                            color = Color.Black, // Text color.
-                            fontSize = 20.sp // Text size.
+                            color = colorResource(id = R.color.trackValueFontColor), // Text color.
+                            fontSize = 20.sp, // Text size.
+                            fontFamily = Ubuntu,
+                            fontWeight = FontWeight.Medium
                         )
                     }
                 }
@@ -183,7 +188,8 @@ fun LazyVerticalGridWithGraph(
                         Text(
                             text = items[item], // Label text.
                             color = Color.White, // Text color.
-                            fontSize = 20.sp // Text size.
+                            fontSize = 20.sp, // Text size.
+                            fontFamily = Ubuntu
                         )
                     }
 
@@ -191,7 +197,7 @@ fun LazyVerticalGridWithGraph(
                         modifier = Modifier
                             .padding(4.dp) // Padding between the label and value boxes.
                             .align(Alignment.CenterHorizontally) // Aligns the value box horizontally in the center.
-                            .fillMaxWidth() // Stellen Sie sicher, dass der Box-Container breit genug ist
+                            .fillMaxWidth() // Make sure that the box container is wide enough
                             .height(130.dp)
                     ){
                         Column {
