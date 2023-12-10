@@ -1,5 +1,7 @@
 package com.example.android_project_3133142
 
+import co.yml.charts.common.model.Point
+
 class Altitude(val max: Int, val min: Int, val delta: Int)
 
 class Slope(
@@ -12,7 +14,8 @@ class Slope(
     val duration: String,
     val gradient: Int,
     val location: String,
-    val date: String
+    val date: String,
+    val pointsData: List<Point>
 ) {
     override fun toString(): String {
         return "Slope(id=$id, maxVelocity=$maxVelocity, avgVelocity=$avgVelocity, distance=$distance, " +

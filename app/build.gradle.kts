@@ -80,4 +80,5 @@ dependencies {
     implementation ("androidx.room:room-runtime:2.3.0")
     implementation ("androidx.room:room-ktx:2.3.0") // Für Kotlin-Unterstützung
     implementation("co.yml:ycharts:2.1.0")
+    implementation ("com.google.code.gson:gson:2.8.8")
 }

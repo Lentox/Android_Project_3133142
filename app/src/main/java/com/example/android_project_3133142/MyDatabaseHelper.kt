@@ -5,12 +5,15 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import co.yml.charts.common.model.Point
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 class MyDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     companion object {
-        const val DATABASE_NAME = "mydatabase.db"
-        const val DATABASE_VERSION = 1
+        const val DATABASE_NAME = "mydatabase3.db"
+        const val DATABASE_VERSION = 3
         const val TABLE_NAME = "slopes"
         const val COLUMN_ID = "id"
         const val COLUMN_MAX_VELOCITY = "max_velocity"
@@ -24,6 +27,7 @@ class MyDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NA
         const val COLUMN_GRADIENT = "gradient"
         const val COLUMN_LOCATION = "location"
         const val COLUMN_DATE = "date"
+        const val COLUMN_POINTSDATA = "pointsdata"
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
@@ -40,7 +44,8 @@ class MyDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NA
                 $COLUMN_DURATION TEXT,
                 $COLUMN_GRADIENT INTEGER,
                 $COLUMN_LOCATION TEXT,
-                $COLUMN_DATE TEXT
+                $COLUMN_DATE TEXT,
+                $COLUMN_POINTSDATA TEXT
             )
         """.trimIndent()
 
@@ -53,6 +58,9 @@ class MyDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NA
 
     fun insertSlope(slope: Slope): Long? {
         val db = writableDatabase
+
+        // Konvertiere die Liste von Punkten in einen JSON-String
+        val pointsDataJson = convertListToJson(slope.pointsData)
 
         val values = ContentValues().apply {
             put(COLUMN_ID, slope.id)
@@ -67,6 +75,7 @@ class MyDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NA
             put(COLUMN_GRADIENT, slope.gradient)
             put(COLUMN_LOCATION, slope.location)
             put(COLUMN_DATE, slope.date)
+            put(COLUMN_POINTSDATA, pointsDataJson)
         }
 
         return db?.insert(TABLE_NAME, null, values)
@@ -97,7 +106,8 @@ class MyDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NA
             COLUMN_DURATION,
             COLUMN_GRADIENT,
             COLUMN_LOCATION,
-            COLUMN_DATE
+            COLUMN_DATE,
+            COLUMN_POINTSDATA
         )
 
         val cursor: Cursor? = db?.query(
@@ -126,12 +136,22 @@ class MyDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NA
                     it.getString(it.getColumnIndexOrThrow(COLUMN_DURATION)),
                     it.getInt(it.getColumnIndexOrThrow(COLUMN_GRADIENT)),
                     it.getString(it.getColumnIndexOrThrow(COLUMN_LOCATION)),
-                    it.getString(it.getColumnIndexOrThrow(COLUMN_DATE))
+                    it.getString(it.getColumnIndexOrThrow(COLUMN_DATE)),
+                    getSlopePointsData(it.getString(it.getColumnIndexOrThrow(COLUMN_POINTSDATA)))
                 )
                 slopes.add(slope)
             }
         }
 
         return slopes
+    }
+
+    private fun convertListToJson(pointsData: List<Point>): String {
+        return Gson().toJson(pointsData)
+    }
+
+    private fun getSlopePointsData(jsonString: String): List<Point> {
+        val type = object : TypeToken<List<Point>>() {}.type
+        return Gson().fromJson(jsonString, type)
     }
 }

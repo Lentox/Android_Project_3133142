@@ -96,10 +96,7 @@ fun LineChartScreen(pointsData: List<Point>){
         containerPaddingEnd = 20.dp,
         bottomPadding = 0.dp
 
-
-
     )
-
 
     LineChart(
         modifier = Modifier
@@ -108,8 +105,4 @@ fun LineChartScreen(pointsData: List<Point>){
         ,
         lineChartData = lineChartData
     )
-}
-
-fun reDrawLineChart(){
-
 }

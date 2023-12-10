@@ -1,8 +1,6 @@
 package com.example.android_project_3133142
 
 import android.annotation.SuppressLint
-import android.graphics.Paint
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -37,16 +35,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -56,17 +49,12 @@ import java.util.Timer
 import java.util.TimerTask
 import kotlin.math.atan
 import kotlin.math.round
-import android.graphics.PointF
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.ui.graphics.*
-import androidx.compose.ui.platform.LocalDensity
 import co.yml.charts.common.model.Point
-import kotlin.random.Random
-
 
 var latitude = "-6.278581"
 var longtitude = "-6.278581"
-var altitude = "23 m"
+var altitude = "23"
 var timestamp = "2023-11-19 20:03:42 +0000"
 var distance = "0"
 
@@ -98,7 +86,8 @@ var slopesArray = mutableListOf<Slope>(
         duration = System.currentTimeMillis().toString(),
         gradient = 10,
         location = "St.Christoph",
-        date = "Oktober 30, 2023"
+        date = "Oktober 30, 2023",
+        listOf(Point(1f, altitude.toFloat()))
     )
 )
 
@@ -134,183 +123,7 @@ fun GridLayout() {
             Icons.Filled.Settings
         )
     }
-
-    @Composable
-    fun LazyVerticalGridWithIcons(
-        items: List<ImageVector>, // List of icons to be displayed.
-        columns: Int, // Number of columns in the grid.
-        play: Boolean,
-        onIconClick: (Int) -> Unit // Function to be called when an icon is clicked.
-    ) {
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(columns), // Fixed number of columns.
-            userScrollEnabled = false, // Scrolling is disabled.
-            modifier = Modifier
-                .padding(top = 30.dp, bottom = 10.dp) // Padding applied to the grid.
-        ) {
-            items(items.size) { item ->
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize() // Fills the maximum size available.
-                        .padding(start = 10.dp, end = 10.dp) // Padding for each item.
-                        .background(
-                            if (((item == 0 || item == 2 || item == 4) && !play && !trackOnGoing && !isCardDisplayed)
-                                || ((item == 0 || item == 2 || item == 4) && trackOnGoing && !isCardDisplayed)
-                                || ((item == 1 || item == 3) && trackOnGoing && !play && !isCardDisplayed)
-                                || ((item == 0 || item == 1 || item == 2) && isCardDisplayed)
-                            )
-                                colorResource(id = R.color.boxBackground) else Color.Gray, // Hintergrundfarbe des Elements.
-                            shape = RoundedCornerShape(25) // Abgerundete Ecken für das Element.
-                        )
-                        .then(
-                            if (((item == 0 || item == 2 || item == 4) && !play && !trackOnGoing && !isCardDisplayed)
-                                || ((item == 0 || item == 2 || item == 4) && trackOnGoing && !isCardDisplayed)
-                                || ((item == 1 || item == 3) && trackOnGoing && !play && !isCardDisplayed)
-                                || ((item == 0 || item == 1 || item == 2) && isCardDisplayed)
-                            )
-                                Modifier.clickable { onIconClick(item) } else Modifier
-                        )
-
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .padding(8.dp) // Padding inside the item.
-                            .align(Alignment.Center) // Aligns the content to the center.
-                    ) {
-                        Icon(
-                            imageVector = items[item],
-                            contentDescription = "Icon",
-                            tint = Color.Black // Icon color.
-                        )
-                    }
-                }
-            }
-        }
-    }
-
-    // Composable function that creates a lazy vertical grid of items with labels and values.
-    @Composable
-    fun LazyVerticalGridWithItems(
-        items: List<String>, // List of item labels.
-        values: List<String>, // List of item values.
-        columns: Int, // Number of columns in the grid.
-    ) {
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(columns), // Fixed number of columns.
-            horizontalArrangement = Arrangement.spacedBy(5.dp), // Horizontal spacing between items.
-            verticalArrangement = Arrangement.spacedBy(10.dp), // Vertical spacing between items.
-            userScrollEnabled = false, // Scrolling is disabled.
-            modifier = Modifier.padding(horizontal = 12.dp) // Padding applied to the grid.
-        ) {
-            items(items.size) { item ->
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize() // Fills the maximum size available.
-                        .padding(8.dp) // Padding for each item.
-                        .background(
-                            colorResource(id = R.color.boxBackground), // Background color of the item.
-                            shape = RoundedCornerShape(8.dp) // Rounded corners for the item.
-                        )
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .padding(8.dp) // Padding inside the item.
-                            .align(Alignment.Center) // Aligns the content to the center.
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .background(
-                                    colorResource(id = R.color.tagBackground), // Background color of the label box.
-                                    shape = RoundedCornerShape(8.dp) // Rounded corners for the label box.
-                                )
-                                .padding(6.dp) // Padding inside the label box.
-                                .align(Alignment.CenterHorizontally) // Aligns the label box horizontally in the center.
-                        ){
-                            Text(
-                                text = items[item], // Label text.
-                                color = Color.White, // Text color.
-                                fontSize = 20.sp // Text size.
-                            )
-                        }
-
-                        Box(
-                            modifier = Modifier
-                                .padding(4.dp) // Padding between the label and value boxes.
-                                .align(Alignment.CenterHorizontally) // Aligns the value box horizontally in the center.
-                        ){
-                            Text(
-                                text = values[item], // Value text.
-                                color = Color.Black, // Text color.
-                                fontSize = 20.sp // Text size.
-                            )
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    @Composable
-    fun LazyVerticalGridWithGraph(
-        items: List<String>, // List of item labels.
-        values: List<String>, // List of item values.
-        columns: Int, // Number of columns in the grid.
-    ) {
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(columns), // Fixed number of columns.
-            horizontalArrangement = Arrangement.spacedBy(5.dp), // Horizontal spacing between items.
-            verticalArrangement = Arrangement.spacedBy(10.dp), // Vertical spacing between items.
-            userScrollEnabled = false, // Scrolling is disabled.
-            modifier = Modifier.padding(horizontal = 12.dp) // Padding applied to the grid.
-        ) {
-            items(items.size) { item ->
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize() // Fills the maximum size available.
-                        .padding(8.dp) // Padding for each item.
-                        .background(
-                            colorResource(id = R.color.boxBackground), // Background color of the item.
-                            shape = RoundedCornerShape(8.dp) // Rounded corners for the item.
-                        )
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .padding(8.dp) // Padding inside the item.
-                            .align(Alignment.Center) // Aligns the content to the center.
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .background(
-                                    colorResource(id = R.color.tagBackground), // Background color of the label box.
-                                    shape = RoundedCornerShape(8.dp) // Rounded corners for the label box.
-                                )
-                                .padding(6.dp) // Padding inside the label box.
-                                .align(Alignment.CenterHorizontally) // Aligns the label box horizontally in the center.
-                        ){
-                            Text(
-                                text = items[item], // Label text.
-                                color = Color.White, // Text color.
-                                fontSize = 20.sp // Text size.
-                            )
-                        }
-
-                        Box(
-                            modifier = Modifier
-                                .padding(4.dp) // Padding between the label and value boxes.
-                                .align(Alignment.CenterHorizontally) // Aligns the value box horizontally in the center.
-                                .fillMaxWidth() // Stellen Sie sicher, dass der Box-Container breit genug ist
-                                .height(130.dp)
-                        ){
-                            Column {
-                                LineChartScreen(pointsData)
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
+    
     // List of labels for grid items.
     val item = listOf(
         "Max. Velocity",
@@ -336,11 +149,11 @@ fun GridLayout() {
     val item3 = listOf(
         "Profile"
     )
-    val values3 = listOf(
+    var values3 = listOf(
         "0"
     )
 
-    LazyVerticalGridWithGraph(items = item3, values = values3, columns = 1)
+    LazyVerticalGridWithGraph(items = item3, values = values3, columns = 1, pointsData)
 
     if (isCardDisplayed){
         // show Timer
@@ -402,10 +215,10 @@ fun GridLayout() {
 
                     values = values.toMutableList().apply {
                         set(0, "$maxVelocity km/h")
-                    }
-                    values = values.toMutableList().apply {
                         set(1, "$averageVelocity km/h")
+                        set(2, "\n${distance} km\n\n")
                     }
+
                     // update altitude
                     maxAltitude = maxOf(maxAltitude.toDouble().toInt(), altitude.toDouble().toInt())
                     if (minAltitude == 0 || minAltitude > altitude.toDouble().toInt()) {
@@ -414,11 +227,6 @@ fun GridLayout() {
                     deltaAltitude = maxAltitude - minAltitude
                     values = values.toMutableList().apply {
                         set(3, "Max ${maxAltitude}m\nMin ${minAltitude}m\nDelta ${deltaAltitude}m\n")
-                    }
-
-                    // update distance
-                    values = values.toMutableList().apply {
-                        set(2, "\n${distance} km\n\n")
                     }
 
                     // update Gradient
@@ -482,6 +290,7 @@ fun GridLayout() {
 
         // Werte zurücksetzen
         values2 = values2.toMutableList().apply {
+            set(2, "0%")
             set(1, "00:00:00")
             set(0, "0")
         }
@@ -502,6 +311,8 @@ fun GridLayout() {
         minAltitude = 0
         deltaAltitude = 0
         gradient = 0
+
+        pointsData = mutableListOf(Point(1f, altitude.toFloat()))
     }
 
     fun onDeleteButtonClick() {
@@ -541,7 +352,8 @@ fun GridLayout() {
             duration =  formatElapsedTime(System.currentTimeMillis() - startTime),
             gradient = gradient,
             location = "${weatherDataAPI?.location ?: "Loading..."}",
-            date = formattedDate
+            date = formattedDate,
+            pointsData = pointsData
         )
         slopesArray.add(slopeObj)
 
@@ -558,6 +370,7 @@ fun GridLayout() {
         items = icon,
         columns = 5,
         play = play,
+        trackOnGoing,
         onIconClick = { index ->
             when(index){
                 0 -> showDialog = !showDialog
@@ -609,7 +422,7 @@ fun MyPopupDialog(
         Box(
             modifier = Modifier
                 .fillMaxWidth(fraction = 0.9f)
-                .fillMaxHeight(fraction = 0.45f)
+                .fillMaxHeight(fraction = 0.40f)
                 .padding(20.dp)
                 .background(Color.White, shape = RoundedCornerShape(16.dp))
         ) {
@@ -641,12 +454,10 @@ fun MyPopupDialog(
                     //Spacer(modifier = Modifier.height(16.dp))
 
                     // Inhalte zentriert in der Column
-                    TextItem(label = "latitude", value = latitude)
-                    TextItem(label = "longtitude", value = longtitude)
+                    TextItem(label = "Latitude", value = latitude)
+                    TextItem(label = "Longtitude", value = longtitude)
                     TextItem(label = "Altitude", value = altitude + "m")
-                    TextItem(label = "timestamp", value = timestamp)
-                    TextItem(label = "Vertical Accuracy", value = "± 12 m")
-                    TextItem(label = "Horizontal Accuracy", value = "± 35 m")
+                    TextItem(label = "Timestamp", value = timestamp)
                 }
             }
         }
