@@ -1,4 +1,4 @@
-package com.example.android_project_3133142
+package com.example.android_project_3133142.layout
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -25,13 +25,17 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
+import com.example.android_project_3133142.manager.WeatherService
+import com.example.android_project_3133142.manager.weatherDataAPI
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.TextStyle
 import java.util.Locale
 
 // Composable function for displaying weather data.
+@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun WeatherDisplay() {
 
@@ -44,11 +48,11 @@ fun WeatherDisplay() {
         // Icon representing the current weather.
         Image(
             painter = rememberImagePainter(data = ("https:" + weatherDataAPI?.conditionIconUrl)), // Uses the weather icon from the data.
-            contentDescription = "Aktuelles Wetter", // Accessibility description.
+            contentDescription = "Current weather", // Accessibility description.
             modifier = Modifier.size(100.dp) // Sets the size of the icon.
         )
         Text(
-            "${weatherDataAPI?.location ?: "Loading..."}",
+            weatherDataAPI?.location ?: "Loading...",
             fontWeight = FontWeight.Bold, // Bold font weight for emphasis.
             fontSize = 30.sp, // Font size.
             fontFamily = FontFamily.SansSerif // Font family.
@@ -61,9 +65,8 @@ fun WeatherDisplay() {
             fontFamily = FontFamily.SansSerif // Font family.
         )
 
-
         Text(
-            "${weatherDataAPI?.conditionText ?: "Loading..."}",
+            weatherDataAPI?.conditionText ?: "Loading...",
             fontSize = 19.sp, // Font size.
             fontFamily = FontFamily.SansSerif, // Font family.
             fontWeight = FontWeight.SemiBold
@@ -100,7 +103,8 @@ fun WeatherDisplay() {
 fun formatMonthNameWithMixedCase(date: LocalDate): String {
     val month = date.month
     val monthName = month.getDisplayName(TextStyle.FULL, Locale.getDefault())
-    return monthName.substring(0, 1).toUpperCase() + monthName.substring(1).toLowerCase()
+    return monthName.substring(0, 1).uppercase(Locale.ROOT) + monthName.substring(1)
+        .lowercase(Locale.ROOT)
 }
 
 // Composable function for a transparent box that displays hourly weather forecasts.
@@ -156,6 +160,7 @@ fun TransparentBoxWithHourlyForecast(hourlyForecast: MutableList<WeatherService.
 }
 
 // Composable function to display hourly weather data.
+@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun HourlyWeatherDisplay(forecast: WeatherService.HourlyForecast) {
     // Column layout for arranging icon and texts vertically.
@@ -173,7 +178,7 @@ fun HourlyWeatherDisplay(forecast: WeatherService.HourlyForecast) {
         // Icon representing the weather.
         Image(
             painter = rememberImagePainter(data = ("https:" + forecast.conditionIcon)), // Uses the weather icon from the data.
-            contentDescription = "Wettericon", // Accessibility description.
+            contentDescription = "WeatherIcon", // Accessibility description.
             modifier = Modifier.size(35.dp) // Sets the size of the icon.
         )
 

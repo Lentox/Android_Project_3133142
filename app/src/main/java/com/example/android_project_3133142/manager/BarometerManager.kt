@@ -1,4 +1,4 @@
-package com.example.android_project_3133142
+package com.example.android_project_3133142.manager
 
 import android.app.Activity
 import android.content.Context
@@ -7,8 +7,9 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.SystemClock
+import com.example.android_project_3133142.altitude
 
-class BarometerManager(private val activity: Activity) : SensorEventListener {
+class BarometerManager(activity: Activity) : SensorEventListener {
     // Obtain the SensorManager from the activity context to interact with the device's sensors.
     private var sensorManager: SensorManager = activity.getSystemService(Context.SENSOR_SERVICE) as SensorManager
 

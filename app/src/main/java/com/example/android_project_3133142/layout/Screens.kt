@@ -1,4 +1,4 @@
-package com.example.android_project_3133142
+package com.example.android_project_3133142.layout
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,10 +25,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
+import com.example.android_project_3133142.controller.displaySlopeCard
+import com.example.android_project_3133142.navigation.Destinations
+import com.example.android_project_3133142.R
+import com.example.android_project_3133142.slopesArray
 
 var statistics = mutableListOf<Statistic>()
 
@@ -104,7 +104,7 @@ fun SlopesScreen(navController: NavHostController) {
             fontFamily = FontFamily.SansSerif
         )
 
-        var exampleData = mutableListOf<CardData>()
+        val exampleData = mutableListOf<CardData>()
 
         for(slope in slopesArray){
             exampleData.add(
@@ -137,9 +137,6 @@ fun SlopesScreen(navController: NavHostController) {
 // Composable function for the Profile Screen.
 @Composable
 fun ProfileScreen() {
-    // MutableState variable für die Statistik
-
-
     // Column layout for the profile screen.
     Column(
         modifier = Modifier

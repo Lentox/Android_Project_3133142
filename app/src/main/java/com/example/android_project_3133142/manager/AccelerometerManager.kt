@@ -1,14 +1,12 @@
-package com.example.android_project_3133142
+package com.example.android_project_3133142.manager
 
 import android.content.Context
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import android.os.SystemClock
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.WbSunny
-import androidx.compose.material3.Icon
+import com.example.android_project_3133142.averageVelocity
+import com.example.android_project_3133142.velocity
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -26,11 +24,10 @@ class AccelerometerManager(context: Context) : SensorEventListener {
     private var lastUpdateTime = 0L
     private var speed = 0f
 
-    private var lastUpdateT = 0L
     private val updateInterval = 1000L // Update interval of 1 second (1000 milliseconds)
 
     private var filteredAcceleration = FloatArray(3) { 0f }
-    private val alpha = 0.3f // Filterkonstante, zwischen 0 und 1, wobei ein höherer Wert eine stärkere Glättung bedeutet
+    private val alpha = 0.3f // Filter constant, between 0 and 1, where a higher value means greater smoothing
 
     init {
         // Register the sensor event listener.
@@ -51,12 +48,12 @@ class AccelerometerManager(context: Context) : SensorEventListener {
                 if (lastUpdateTime != 0L) {
                     val timeDiff = currentTime - lastUpdateTime
 
-                    // Anwendung des Tiefpassfilters auf die Beschleunigungsdaten
+                    // Application of the low-pass filter to the acceleration data
                     filteredAcceleration[0] = alpha * filteredAcceleration[0] + (1 - alpha) * event.values[0]
                     filteredAcceleration[1] = alpha * filteredAcceleration[1] + (1 - alpha) * event.values[1]
                     filteredAcceleration[2] = alpha * filteredAcceleration[2] + (1 - alpha) * event.values[2]
 
-                    // Berechne den Betrag der gefilterten Beschleunigung
+                    // Calculate the amount of the filtered acceleration
                     val accelerationMagnitude = sqrt(filteredAcceleration[0].pow(2) + filteredAcceleration[1].pow(2) + filteredAcceleration[2].pow(2))
 
 
@@ -81,17 +78,17 @@ class AccelerometerManager(context: Context) : SensorEventListener {
     }
 
     companion object {
-        const val STILL_THRESHOLD = 0.01 // Schwellenwert für Stillstand, anpassen nach
+        const val STILL_THRESHOLD = 0.01 // Threshold value for standstill
     }
 
     // Method to calculate the current speed based on the accelerometer data.
-    fun getCurrentSpeed(): Double {
+    private fun getCurrentSpeed(): Double {
         return speed * 3.6 // Convert speed to km/h (if speed is in m/s)
     }
-    fun getAverageVelocity(): Double {
+    private fun getAverageVelocity(): Double {
         val elapsedTimeMillis = if (startTimeT > 0) System.currentTimeMillis() - startTimeT else 1
-        val elapsedTimeSeconds = elapsedTimeMillis / 1000.0 // Umrechnung von Millisekunden in Sekunden
-        if (elapsedTimeSeconds == 0.0) return 0.0 // Vermeide Division durch Null
-        return (totalDistance / elapsedTimeSeconds) * 3.6 // Umrechnung von m/s in km/h
+        val elapsedTimeSeconds = elapsedTimeMillis / 1000.0 // Conversion from milliseconds to seconds
+        if (elapsedTimeSeconds == 0.0) return 0.0 // Avoid division by zero
+        return (totalDistance / elapsedTimeSeconds) * 3.6 //Conversion from m/s to km/h
     }
 }

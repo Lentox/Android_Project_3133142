@@ -1,4 +1,4 @@
-package com.example.android_project_3133142
+package com.example.android_project_3133142.manager
 
 import android.annotation.SuppressLint
 import androidx.compose.runtime.getValue
@@ -6,7 +6,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.json.responseJson
-import java.time.LocalDateTime
 import java.time.LocalTime
 
 var weatherDataAPI: WeatherService.WeatherData? by mutableStateOf(null)
@@ -53,15 +52,15 @@ class WeatherService {
                 val humidity = current.getInt("humidity")
                 val cloud = current.getInt("cloud")
 
-                // Auslesen der Tagesdaten für die Mindest- und Höchsttemperatur
+                // Reading out the daily data for the minimum and maximum temperature
                 val forecast = jsonResponse.getJSONObject("forecast")
-                val forecastdayArray = forecast.getJSONArray("forecastday")
-                val todayForecast = forecastdayArray.getJSONObject(0)
+                val forecastDay = forecast.getJSONArray("forecastday")
+                val todayForecast = forecastDay.getJSONObject(0)
                 val dayData = todayForecast.getJSONObject("day")
                 val minTemp = dayData.getDouble("mintemp_c")
                 val maxTemp = dayData.getDouble("maxtemp_c")
 
-                // Auslesen der Vorhersagedaten für die nächsten 24 Stunden
+                // Reading out the forecast data for the next 24 hours
                 val hourlyForecast = todayForecast.getJSONArray("hour")
 
                 for (i in 0 until hourlyForecast.length()) {
@@ -74,22 +73,22 @@ class WeatherService {
 
 
                     fun getNextHour(hour: Int): Int {
-                        return (hour + 1) % 24 // Modulo 24 sorgt für den Wrap-around bei 24
+                        return (hour + 1) % 24 // Modulo 24 provides the wrap-around for 24
                     }
 
                     val now = LocalTime.now().hour
 
-                    var hoursToCheck = listOf(now, getNextHour(now), getNextHour(getNextHour(now)), getNextHour(getNextHour(getNextHour(now))))
+                    val hoursToCheck = listOf(now, getNextHour(now), getNextHour(getNextHour(now)), getNextHour(getNextHour(getNextHour(now))))
 
                     val updatedHours = hoursToCheck.map {
                         if (it < 10) "0$it" else "$it"
                     }
 
-                    var forecastTimeHour = forecastTime.substring(0,2)
+                    val forecastTimeHour = forecastTime.substring(0,2)
 
-                    for (i in hoursToCheck.indices){
+                    for (z in hoursToCheck.indices){
                         for (j in forecastTime.indices){
-                            if (updatedHours[i] == forecastTimeHour){
+                            if (updatedHours[z] == forecastTimeHour){
                                 val forecastWeatherData = HourlyForecast(
                                     hour = forecastTimeHour.toInt(),
                                     temp = hourlyTemp,
@@ -101,7 +100,7 @@ class WeatherService {
                         }
                     }
                 }
-                // Wetterdatenobjekt erstellen und verwenden
+                // Create and use weather data object
                 weatherDataAPI = WeatherData(location, temp, maxTemp, minTemp, conditionIconUrl, humidity, cloud, conditionText, forecastOutputs)
 
             }, failure = { error ->

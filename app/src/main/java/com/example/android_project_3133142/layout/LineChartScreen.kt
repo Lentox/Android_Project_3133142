@@ -1,4 +1,4 @@
-package com.example.android_project_3133142
+package com.example.android_project_3133142.layout
 
 
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,6 +23,7 @@ import co.yml.charts.ui.linechart.model.LineType
 import co.yml.charts.ui.linechart.model.SelectionHighlightPoint
 import co.yml.charts.ui.linechart.model.SelectionHighlightPopUp
 import co.yml.charts.ui.linechart.model.ShadowUnderLine
+import com.example.android_project_3133142.R
 import kotlin.math.roundToInt
 
 @Composable

@@ -1,4 +1,4 @@
-package com.example.android_project_3133142
+package com.example.android_project_3133142.layout
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -23,6 +23,9 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import co.yml.charts.common.model.Point
+import com.example.android_project_3133142.R
+import com.example.android_project_3133142.currentDisplayedCard
+import com.example.android_project_3133142.isCardDisplayed
 
 @Composable
 fun LazyVerticalGridWithIcons(
@@ -143,7 +146,6 @@ fun LazyVerticalGridWithItems(
 @Composable
 fun LazyVerticalGridWithGraph(
     items: List<String>, // List of item labels.
-    values: List<String>, // List of item values.
     columns: Int, // Number of columns in the grid.
     pointsData: List<Point>
 ) {

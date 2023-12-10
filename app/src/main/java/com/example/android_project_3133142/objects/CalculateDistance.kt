@@ -1,4 +1,4 @@
-package com.example.android_project_3133142
+package com.example.android_project_3133142.objects
 
 import kotlin.math.asin
 import kotlin.math.cos
@@ -7,7 +7,7 @@ import kotlin.math.sin
 import kotlin.math.sqrt
 
 fun calculateDistance(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {
-    val earthRadius = 6371.0 // Radius der Erde in Kilometern
+    val earthRadius = 6371.0 // Radius of the earth
 
     val dLat = Math.toRadians(lat2 - lat1)
     val dLon = Math.toRadians(lon2 - lon1)

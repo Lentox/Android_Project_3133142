@@ -1,4 +1,4 @@
-package com.example.android_project_3133142
+package com.example.android_project_3133142.navigation
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -8,7 +8,6 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -18,13 +17,12 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.android_project_3133142.R
 
 // NavigationBottomBar of the App.
 @Composable
 fun BottomBar(
     navController: NavHostController, // Navigation controller for managing navigation events.
-    state: MutableState<Boolean>, // Mutable state to manage some UI state changes.
-    modifier: Modifier = Modifier // Modifier for customizing the UI layout and behavior.
 ) {
     // List of destinations to be displayed in the BottomBar.
     val screens = listOf(

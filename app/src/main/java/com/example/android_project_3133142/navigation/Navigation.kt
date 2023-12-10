@@ -1,9 +1,13 @@
-package com.example.android_project_3133142
+package com.example.android_project_3133142.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.android_project_3133142.layout.HomeScreen
+import com.example.android_project_3133142.layout.ProfileScreen
+import com.example.android_project_3133142.layout.SlopesScreen
+import com.example.android_project_3133142.layout.TrackScreen
 
 // Composable function to define the navigation graph for the application.
 @Composable

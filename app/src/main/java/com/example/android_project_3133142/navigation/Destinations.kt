@@ -1,4 +1,4 @@
-package com.example.android_project_3133142
+package com.example.android_project_3133142.navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DownhillSkiing

@@ -1,4 +1,4 @@
-package com.example.android_project_3133142
+package com.example.android_project_3133142.layout
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -30,8 +30,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.example.android_project_3133142.R
 
 // Composable function to display a scrollable list of cards.
 @Composable
@@ -61,7 +63,8 @@ fun ScrollableCardList(items: List<CardData>, onIconClick: (Int) -> Unit) {
                     Image(
                         painter = painterResource(id = item.imageRes), // Image resource.
                         contentDescription = null, // Accessibility description.
-                        modifier = Modifier.size(100.dp) // Size of the image.
+                        modifier = Modifier
+                            .size(100.dp) // Size of the image.
                             .clip(RoundedCornerShape(8.dp)), // Rounded corners of the image.
                         contentScale = ContentScale.Crop // Scaling of the image.
                     )
@@ -78,7 +81,7 @@ fun ScrollableCardList(items: List<CardData>, onIconClick: (Int) -> Unit) {
                                 .wrapContentWidth()
                                 .padding(horizontal = 4.dp, vertical = 4.dp)
                                 .clip(RoundedCornerShape(8.dp)) // Rounded corners for the box.
-                                .background(Color.Blue) // Background color of the box.
+                                .background(colorResource(id = R.color.tagBackground)) // Background color of the box.
                         ) {
                             // Text displaying the location.
                             Text(
@@ -116,7 +119,7 @@ fun ScrollableCardList(items: List<CardData>, onIconClick: (Int) -> Unit) {
                     IconButton(onClick = { onIconClick(index) }) {
                         Icon(
                             imageVector = Icons.Default.MoreVert, // Icon vector.
-                            contentDescription = "Mehr Optionen" // Accessibility description.
+                            contentDescription = "More Options" // Accessibility description.
                         )
                     }
                 }

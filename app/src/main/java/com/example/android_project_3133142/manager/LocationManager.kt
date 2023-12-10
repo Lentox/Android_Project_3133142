@@ -1,4 +1,4 @@
-package com.example.android_project_3133142
+package com.example.android_project_3133142.manager
 
 import android.Manifest
 import android.app.Activity
@@ -6,6 +6,11 @@ import android.content.pm.PackageManager
 import android.os.Looper
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.example.android_project_3133142.distance
+import com.example.android_project_3133142.latitude
+import com.example.android_project_3133142.longitude
+import com.example.android_project_3133142.timestamp
+import com.example.android_project_3133142.objects.calculateDistance
 import com.google.android.gms.location.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -19,24 +24,23 @@ class LocationManager(private val activity: Activity) {
     private val fusedLocationClient: FusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(activity)
 
     // Define a constant for the location permission request code.
-    private val LOCATION_PERMISSION_REQUEST_CODE = 1
+    private val locationPermissionRequestCode = 1
 
     // Configure the location request parameters.
-    private val locationRequest: LocationRequest = LocationRequest.create().apply {
-        interval = 10000  // Set the interval for location updates (10 seconds).
-        fastestInterval = 5000  // Set the fastest interval for location updates (5 seconds).
-        priority = LocationRequest.PRIORITY_HIGH_ACCURACY  // Set the priority to high accuracy.
-    }
+    private val locationRequest = LocationRequest.Builder(10000L) // Set the interval for location updates (10 seconds).
+        .setMinUpdateIntervalMillis(5000L) // Optionally, set the fastest interval for location updates (5 seconds).
+        .setPriority(Priority.PRIORITY_HIGH_ACCURACY) // Set the priority to high accuracy.
+        .build()
 
     // Define a callback for handling location updates.
     private val locationCallback: LocationCallback = object : LocationCallback() {
         override fun onLocationResult(p0: LocationResult) {
-            p0 ?: return
+            
             for (location in p0.locations) {
                 // Process each location in the result.
                 println("Lat: " + location.latitude + " Long: " + location.longitude + " Alt: " + location.altitude + " Zeit: " + SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date()))
                 latitude = location.latitude.toString()
-                longtitude = location.longitude.toString()
+                longitude = location.longitude.toString()
                 timestamp = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
                 val weatherService = WeatherService()
                 weatherService.getWeather(location.latitude, location.longitude)
@@ -61,7 +65,7 @@ class LocationManager(private val activity: Activity) {
             ActivityCompat.requestPermissions(
                 activity,
                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                LOCATION_PERMISSION_REQUEST_CODE
+                locationPermissionRequestCode
             )
         } else {
             startLocationUpdates()
@@ -69,13 +73,13 @@ class LocationManager(private val activity: Activity) {
     }
 
     // Handle the result of the location permission request.
-    fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+    fun onRequestPermissionsResult(requestCode: Int, grantResults: IntArray) {
         when (requestCode) {
-            LOCATION_PERMISSION_REQUEST_CODE -> {
+            locationPermissionRequestCode -> {
                 if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                     startLocationUpdates()
                 } else {
-                    println("Berechtigung wurde verweigert") // Permission was denied
+                    println("Authorization was denied") // Permission was denied
                 }
             }
         }
