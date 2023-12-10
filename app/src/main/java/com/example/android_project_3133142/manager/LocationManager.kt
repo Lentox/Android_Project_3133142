@@ -72,19 +72,6 @@ class LocationManager(private val activity: Activity) {
         }
     }
 
-    // Handle the result of the location permission request.
-    fun onRequestPermissionsResult(requestCode: Int, grantResults: IntArray) {
-        when (requestCode) {
-            locationPermissionRequestCode -> {
-                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                    startLocationUpdates()
-                } else {
-                    println("Authorization was denied") // Permission was denied
-                }
-            }
-        }
-    }
-
     // Start receiving location updates if permission is granted.
     private fun startLocationUpdates() {
         if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION)

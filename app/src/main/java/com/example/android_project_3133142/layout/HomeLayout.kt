@@ -20,7 +20,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -123,7 +122,7 @@ fun TransparentBoxWithHourlyForecast(hourlyForecast: MutableList<WeatherService.
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(8.dp)) // Rounded corners for the box.
-            .background(Color(0xFFE7E0EC).copy(alpha = 0.8f)) // Semi-transparent background color.
+            .background(colorResource(id = R.color.whiteBackgroundBox)) // Semi-transparent background color.
             .padding(16.dp) // Padding around the box.
             .wrapContentSize() // Adjusts the size of the box to its content.
     ) {

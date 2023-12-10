@@ -17,7 +17,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
@@ -91,7 +90,7 @@ fun ProfileStatisticsView(statistics: List<Statistic>) {
             .fillMaxWidth() // Fills the maximum width available.
             .padding(16.dp) // Padding around the box.
             .clip(RoundedCornerShape(12.dp)) // Rounded corners for the box.
-            .background(Color.White.copy(alpha = 0.8f)) // Semi-transparent white background.
+            .background(colorResource(id = R.color.whiteBackgroundBox)) // Semi-transparent white background.
             .padding(8.dp) // Additional padding inside the box.
     ) {
         // Column layout to arrange statistic boxes vertically.

@@ -5,7 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.android_project_3133142.layout.HomeScreen
-import com.example.android_project_3133142.layout.ProfileScreen
+import com.example.android_project_3133142.layout.StatisticsScreen
 import com.example.android_project_3133142.layout.SlopesScreen
 import com.example.android_project_3133142.layout.TrackScreen
 
@@ -32,7 +32,7 @@ fun NavigationGraph(navController: NavHostController) {
         }
         // Defines a composable destination for the Profile screen.
         composable(Destinations.Profile.route) {
-            ProfileScreen() // Calls the ProfileScreen composable function.
+            StatisticsScreen() // Calls the ProfileScreen composable function.
         }
     }
 }

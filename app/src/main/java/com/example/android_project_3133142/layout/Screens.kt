@@ -136,7 +136,7 @@ fun SlopesScreen(navController: NavHostController) {
 
 // Composable function for the Profile Screen.
 @Composable
-fun ProfileScreen() {
+fun StatisticsScreen() {
     // Column layout for the profile screen.
     Column(
         modifier = Modifier

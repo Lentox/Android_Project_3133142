@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
-
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -52,33 +50,38 @@ android {
 }
 
 dependencies {
-    implementation ("androidx.navigation:navigation-compose:2.6.0")
-    implementation("com.github.kittinunf.fuel:fuel:2.3.1")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
-    implementation("androidx.activity:activity-compose:1.8.0")
+    // AndroidX und Compose
     implementation(platform("androidx.compose:compose-bom:2023.03.00"))
+    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("androidx.activity:activity-compose:1.8.1")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
+    implementation("androidx.navigation:navigation-compose:2.7.5")
+
+    // Compose UI components
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
     implementation("androidx.compose.material:material-icons-extended")
+
+    // Test libraries
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     androidTestImplementation(platform("androidx.compose:compose-bom:2023.03.00"))
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
+
+    // Debugging tools
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
-}
-dependencies {
-    implementation("androidx.appcompat:appcompat:1.6.1")
+
+    // External libraries
     implementation("com.google.android.gms:play-services-location:21.0.1")
-    implementation ("androidx.navigation:navigation-compose:2.7.5")
-    implementation ("com.github.kittinunf.fuel:fuel:2.3.1") // für HTTP-Anfragen
-    implementation ("com.github.kittinunf.fuel:fuel-json:2.3.1") // für JSON-Verarbeitung
-    implementation ("io.coil-kt:coil-compose:1.3.2")
-    implementation ("androidx.room:room-runtime:2.3.0")
-    implementation ("androidx.room:room-ktx:2.3.0") // Für Kotlin-Unterstützung
+    implementation("com.github.kittinunf.fuel:fuel:2.3.1")
+    implementation("com.github.kittinunf.fuel:fuel-json:2.3.1")
+    implementation("io.coil-kt:coil-compose:1.3.2")
+    implementation("androidx.room:room-runtime:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1")
     implementation("co.yml:ycharts:2.1.0")
-    implementation ("com.google.code.gson:gson:2.8.8")
+    implementation("com.google.code.gson:gson:2.8.9")
 }
