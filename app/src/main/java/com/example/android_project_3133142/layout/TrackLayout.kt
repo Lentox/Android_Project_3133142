@@ -1,19 +1,7 @@
 package com.example.android_project_3133142.layout
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Dangerous
 import androidx.compose.material.icons.filled.PauseCircle
 import androidx.compose.material.icons.filled.PlayCircle
@@ -21,10 +9,6 @@ import androidx.compose.material.icons.filled.PlayCircleOutline
 import androidx.compose.material.icons.filled.Route
 import androidx.compose.material.icons.filled.SaveAlt
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -33,12 +17,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Timer
@@ -46,7 +25,6 @@ import java.util.TimerTask
 import kotlin.math.round
 import androidx.compose.ui.graphics.*
 import co.yml.charts.common.model.Point
-import com.example.android_project_3133142.Ubuntu
 import com.example.android_project_3133142.objects.Altitude
 import com.example.android_project_3133142.manager.MyDatabaseHelper
 import com.example.android_project_3133142.objects.Slope
@@ -65,8 +43,6 @@ import com.example.android_project_3133142.elapsedTimeWhenPaused
 import com.example.android_project_3133142.gradient
 import com.example.android_project_3133142.isCardDisplayed
 import com.example.android_project_3133142.isStopwatchRunning
-import com.example.android_project_3133142.latitude
-import com.example.android_project_3133142.longitude
 import com.example.android_project_3133142.maxVelocity
 import com.example.android_project_3133142.oldAltitude
 import com.example.android_project_3133142.runs
@@ -75,7 +51,6 @@ import com.example.android_project_3133142.selectedVerticalUnit
 import com.example.android_project_3133142.slopesArray
 import com.example.android_project_3133142.startTime
 import com.example.android_project_3133142.timer
-import com.example.android_project_3133142.timestamp
 import com.example.android_project_3133142.velocity
 
 // A Composable function to create a grid layout.

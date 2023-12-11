@@ -2,6 +2,7 @@ package com.example.android_project_3133142.layout
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -32,18 +33,33 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.android_project_3133142.R
 import com.example.android_project_3133142.Ubuntu
 
 // Composable function to display a scrollable list of cards.
 @Composable
 fun ScrollableCardList(items: List<CardData>, onIconClick: (Int) -> Unit) {
+
+    if (items.isEmpty()) {
+        EmptyListMessage()
+    } else {
+        CreateListItems(items,onIconClick)
+    }
+
+}
+
+@Composable
+fun CreateListItems(items: List<CardData>, onIconClick: (Int) -> Unit) {
     // LazyColumn creates a vertically scrollable column that only composes and lays out the currently visible items.
     LazyColumn (
         modifier = Modifier
             .height(605.dp) // Explicit height of the LazyColumn.
     ){
+
         // Creates a list of items based on the 'items' list passed to the function.
         itemsIndexed(items) { index, item ->
             // Card composable to display each item.
@@ -133,6 +149,44 @@ fun ScrollableCardList(items: List<CardData>, onIconClick: (Int) -> Unit) {
         }
     }
 }
+
+
+@Composable
+fun EmptyListMessage() {
+    // If the list is empty, show the message and the hint
+    Box(
+        modifier = Modifier
+            .height(150.dp)
+            .width(450.dp)
+            .padding(16.dp)
+            .background(
+                color = colorResource(id = R.color.whiteBackgroundBox),
+                shape = RoundedCornerShape(8.dp)
+            ),
+        contentAlignment = Alignment.Center,
+    ) {
+        Column(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                "No tracks available",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                color = colorResource(id = R.color.tagBackground),
+                fontFamily = Ubuntu,
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                "Start a track and save it to see it here!",
+                textAlign = TextAlign.Center,
+                color = colorResource(id = R.color.tagBackground),
+                fontFamily = Ubuntu
+            )
+        }
+    }
+}
+
 
 // Data class representing the data for a card.
 data class CardData(
