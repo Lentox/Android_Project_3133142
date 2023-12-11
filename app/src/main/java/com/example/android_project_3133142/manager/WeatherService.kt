@@ -102,6 +102,7 @@ class WeatherService {
                 }
                 // Create and use weather data object
                 weatherDataAPI = WeatherData(location, temp, maxTemp, minTemp, conditionIconUrl, humidity, cloud, conditionText, forecastOutputs)
+                println(forecastOutputs)
 
             }, failure = { error ->
                 println("An error occurred: ${error.message}")

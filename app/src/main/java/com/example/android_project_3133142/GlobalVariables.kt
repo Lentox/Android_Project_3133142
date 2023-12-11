@@ -3,6 +3,10 @@ package com.example.android_project_3133142
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import co.yml.charts.common.model.Point
+import com.example.android_project_3133142.layout.Speed
+import com.example.android_project_3133142.layout.SpeedUnit
+import com.example.android_project_3133142.layout.Vertical
+import com.example.android_project_3133142.layout.VerticalUnit
 import com.example.android_project_3133142.objects.Altitude
 import com.example.android_project_3133142.objects.Slope
 import java.util.Timer
@@ -50,3 +54,6 @@ var slopesArray = mutableListOf(
 val Ubuntu = FontFamily(
     Font(R.font.ubuntub),
 )
+
+var selectedSpeedUnit = SpeedUnit(Speed.KMH)
+var selectedVerticalUnit = VerticalUnit(Vertical.M)

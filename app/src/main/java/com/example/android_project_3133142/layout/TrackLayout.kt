@@ -26,6 +26,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
@@ -69,6 +70,8 @@ import com.example.android_project_3133142.longitude
 import com.example.android_project_3133142.maxVelocity
 import com.example.android_project_3133142.oldAltitude
 import com.example.android_project_3133142.runs
+import com.example.android_project_3133142.selectedSpeedUnit
+import com.example.android_project_3133142.selectedVerticalUnit
 import com.example.android_project_3133142.slopesArray
 import com.example.android_project_3133142.startTime
 import com.example.android_project_3133142.timer
@@ -83,7 +86,9 @@ fun GridLayout() {
     val dbHelper = MyDatabaseHelper(context = LocalContext.current)
 
     var play by remember { mutableStateOf(false) }
-    var showDialog by remember { mutableStateOf(false) }
+
+    var showDialogSettings by remember { mutableStateOf(false) }
+    var showDialogPosition by remember { mutableStateOf(false) }
 
     var trackOnGoing by remember { mutableStateOf(false) }
 
@@ -95,6 +100,15 @@ fun GridLayout() {
     var values2 by remember { mutableStateOf(listOf("0", "00:00:00", "0%")) }
 
     var values by remember { mutableStateOf(listOf("0 km/h", "0 km/h", "\n0 km\n\n", "Max 0m\nMin 0m\nDelta 0m\n")) }
+
+    LaunchedEffect(selectedSpeedUnit, selectedVerticalUnit) {
+        values = listOf(
+            "0 ${selectedSpeedUnit.unit.label}",
+            "0 ${selectedSpeedUnit.unit.label}",
+            "\n0 km\n\n",
+            "Max 0${selectedVerticalUnit.unit.label}\nMin 0${selectedVerticalUnit.unit.label}\nDelta 0${selectedVerticalUnit.unit.label}\n"
+        )
+    }
 
     var pointsData by remember { mutableStateOf(listOf(Point(1f, altitude.toFloat()))) }
 
@@ -184,8 +198,8 @@ fun GridLayout() {
                 }
 
                 values = values.toMutableList().apply {
-                    set(0, "$maxVelocity km/h")
-                    set(1, "$averageVelocity km/h")
+                    set(0, "$maxVelocity ${selectedSpeedUnit.unit.label}")
+                    set(1, "$averageVelocity ${selectedSpeedUnit.unit.label}")
                     set(2, "\n$distance km\n\n")
                 }
 
@@ -196,7 +210,7 @@ fun GridLayout() {
                 }
                 deltaAltitude = maxAltitude - minAltitude
                 values = values.toMutableList().apply {
-                    set(3, "Max ${maxAltitude}m\nMin ${minAltitude}m\nDelta ${deltaAltitude}m\n")
+                    set(3, "Max ${maxAltitude}${selectedVerticalUnit.unit.label}\nMin ${minAltitude}${selectedVerticalUnit.unit.label}\nDelta ${deltaAltitude}${selectedVerticalUnit.unit.label}\n")
                 }
 
                 // update Gradient
@@ -270,10 +284,10 @@ fun GridLayout() {
         }
         runs = 0
         values = values.toMutableList().apply {
-            set(3, "Max 0m\nMin 0m\nDelta 0m\n")
+            set(3, "Max 0${selectedVerticalUnit.unit.label}\nMin 0${selectedVerticalUnit.unit.label}\nDelta 0${selectedVerticalUnit.unit.label}\n")
             set(2, "\n0 km\n\n")
-            set(1, "0 km/h")
-            set(0, "0 km/h")
+            set(1, "0 ${selectedSpeedUnit.unit.label}")
+            set(0, "0 ${selectedSpeedUnit.unit.label}")
         }
         totalDistance = 0f
         startTimeT = 0L
@@ -338,10 +352,6 @@ fun GridLayout() {
         resetValues()
     }
 
-    fun onSettingsButtonClick() {
-        TODO("Not yet implemented")
-    }
-
     if (isCardDisplayed){
         displayCard()
     }
@@ -354,85 +364,23 @@ fun GridLayout() {
         trackOnGoing,
         onIconClick = { index ->
             when(index){
-                0 -> showDialog = !showDialog
+                0 -> showDialogPosition = !showDialogPosition
                 1 -> onDeleteButtonClick()
                 2 -> onPlayButtonClick()
                 3 -> onSaveButtonClick()
-                4 -> onSettingsButtonClick()
+                4 -> showDialogSettings = !showDialogSettings
             }
         }
     )
-    if (showDialog) {
-        MyPopupDialog(
-            onDismiss = { showDialog = false },
+    if (showDialogPosition) {
+        PopupDialog(
+            onDismiss = { showDialogPosition = false },
+            index = 0
         )
-    }
-}
-
-@Composable
-fun MyPopupDialog(
-    onDismiss: () -> Unit,
-) {
-    Dialog(onDismissRequest = onDismiss) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth(fraction = 0.9f)
-                .fillMaxHeight(fraction = 0.40f)
-                .padding(20.dp)
-                .background(Color.White, shape = RoundedCornerShape(16.dp))
-        ) {
-            Column(
-                modifier = Modifier.padding(10.dp)
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 8.dp, end = 8.dp, start = 8.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        "Position",
-                        style = MaterialTheme.typography.titleSmall,
-                        modifier = Modifier.weight(1f),
-                        fontFamily = Ubuntu
-                    )
-                    IconButton(onClick = onDismiss) {
-                        Icon(Icons.Default.Close, contentDescription = "Close")
-                    }
-                }
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 8.dp, end = 8.dp, start = 8.dp),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    TextItem(label = "Latitude", value = latitude)
-                    TextItem(label = "Longitude", value = longitude)
-                    TextItem(label = "Altitude", value = altitude + "m")
-                    TextItem(label = "Timestamp", value = timestamp)
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun TextItem(label: String, value: String) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = label,
-            style = MaterialTheme.typography.titleMedium,
-            color = Color.Gray,
-            fontFamily = Ubuntu
+    }else if (showDialogSettings){
+        PopupDialog(
+            onDismiss = { showDialogSettings = false },
+            index = 1
         )
-        Text(
-            text = value,
-            style = MaterialTheme.typography.bodyMedium,
-            fontFamily = Ubuntu
-        )
-        Spacer(modifier = Modifier.height(8.dp)) // Spacer for vertical spacing.
     }
 }
