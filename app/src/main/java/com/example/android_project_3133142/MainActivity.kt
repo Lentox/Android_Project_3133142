@@ -7,7 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.material3.Scaffold
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.android_project_3133142.layout.reCalcStatistic
+import com.example.android_project_3133142.controller.reCalcStatistic
 import com.example.android_project_3133142.manager.AccelerometerManager
 import com.example.android_project_3133142.manager.BarometerManager
 import com.example.android_project_3133142.manager.LocationManager

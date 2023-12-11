@@ -37,6 +37,7 @@ import com.example.android_project_3133142.manager.totalDistance
 import com.example.android_project_3133142.manager.weatherDataAPI
 import com.example.android_project_3133142.altitude
 import com.example.android_project_3133142.averageVelocity
+import com.example.android_project_3133142.controller.reCalcStatistic
 import com.example.android_project_3133142.currentDisplayedCard
 import com.example.android_project_3133142.distance
 import com.example.android_project_3133142.elapsedTimeWhenPaused

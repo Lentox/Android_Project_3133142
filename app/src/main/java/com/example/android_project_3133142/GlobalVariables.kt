@@ -3,38 +3,44 @@ package com.example.android_project_3133142
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import co.yml.charts.common.model.Point
-import com.example.android_project_3133142.layout.Speed
-import com.example.android_project_3133142.layout.SpeedUnit
-import com.example.android_project_3133142.layout.Vertical
-import com.example.android_project_3133142.layout.VerticalUnit
+import com.example.android_project_3133142.controller.Speed
+import com.example.android_project_3133142.controller.SpeedUnit
+import com.example.android_project_3133142.controller.Vertical
+import com.example.android_project_3133142.controller.VerticalUnit
 import com.example.android_project_3133142.objects.Altitude
 import com.example.android_project_3133142.objects.Slope
 import java.util.Timer
 
-// Global variables
-var latitude = "0.0"
-var longitude = "0.0"
-var altitude = "0"
-var timestamp = "2023-01-01 00:00:00 +0000"
-var distance = "0"
+// Global Position and Timestamp Variables
+var latitude = "0.0" // Current latitude
+var longitude = "0.0" // Current longitude
+var altitude = "0"    // Current altitude
+var timestamp = "2023-01-01 00:00:00 +0000" // Timestamp for the current data
+var distance = "0"    // Distance traveled
 
-var isStopwatchRunning = false
-var elapsedTimeWhenPaused = 0L
-var startTime = 0L
-var timer: Timer? = null
+// Stopwatch and Timer Variables
+var isStopwatchRunning = false      // Flag indicating if the stopwatch is running
+var elapsedTimeWhenPaused = 0L      // Elapsed time when the stopwatch was paused
+var startTime = 0L                  // Start time of the stopwatch
+var timer: Timer? = null            // Timer used for updating UI in regular intervals
 
-var runs = 0
+// Running Stats Variables
+var runs = 0                        // Number of runs
 
-var velocity = 0
-var maxVelocity = 0
-var averageVelocity = 0
+// Velocity and Gradient Variables
+var velocity = 0                    // Current velocity
+var maxVelocity = 0                 // Maximum recorded velocity
+var averageVelocity = 0             // Average velocity
 
-var oldAltitude = 0
-var gradient = 0
+// Altitude and Gradient Variables
+var oldAltitude = 0                 // Previous altitude
+var gradient = 0                    // Slope gradient
 
-var isCardDisplayed = false
-var currentDisplayedCard: Slope? = null
+// Card Display Variables
+var isCardDisplayed = false          // Flag indicating if a card is currently displayed
+var currentDisplayedCard: Slope? = null // Currently displayed card (if any)
 
+// List of Recorded Slopes
 var slopesArray = mutableListOf(
     Slope(
         id = 1,
@@ -47,13 +53,15 @@ var slopesArray = mutableListOf(
         gradient = 10,
         location = "St.Christoph",
         date = "October 30, 2023",
-        listOf(Point(1f, altitude.toFloat()))
+        pointsData = listOf(Point(1f, altitude.toFloat()))
     )
 )
 
+// Font Family for Typography
 val Ubuntu = FontFamily(
     Font(R.font.ubuntub),
 )
 
+// Selected Units for Speed and Vertical Measurements
 var selectedSpeedUnit = SpeedUnit(Speed.KMH)
 var selectedVerticalUnit = VerticalUnit(Vertical.M)

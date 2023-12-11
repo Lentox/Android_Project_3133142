@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -29,7 +30,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -39,17 +39,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.android_project_3133142.R
 import com.example.android_project_3133142.Ubuntu
+import com.example.android_project_3133142.controller.CardData
 
 // Composable function to display a scrollable list of cards.
 @Composable
 fun ScrollableCardList(items: List<CardData>, onIconClick: (Int) -> Unit) {
-
     if (items.isEmpty()) {
         EmptyListMessage()
     } else {
         CreateListItems(items,onIconClick)
     }
-
 }
 
 @Composable
@@ -153,51 +152,43 @@ fun CreateListItems(items: List<CardData>, onIconClick: (Int) -> Unit) {
 
 @Composable
 fun EmptyListMessage() {
-    // If the list is empty, show the message and the hint
-    Box(
+    Column(
         modifier = Modifier
-            .height(150.dp)
-            .width(450.dp)
-            .padding(16.dp)
-            .background(
-                color = colorResource(id = R.color.whiteBackgroundBox),
-                shape = RoundedCornerShape(8.dp)
-            ),
-        contentAlignment = Alignment.Center,
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Column(
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+        Box(
+            modifier = Modifier
+                .height(150.dp)
+                .width(450.dp)
+                .background(
+                    color = colorResource(id = R.color.whiteBackgroundBox),
+                    shape = RoundedCornerShape(8.dp)
+                ),
+            contentAlignment = Alignment.Center
         ) {
-            Text(
-                "No tracks available",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                color = colorResource(id = R.color.tagBackground),
-                fontFamily = Ubuntu,
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                "Start a track and save it to see it here!",
-                textAlign = TextAlign.Center,
-                color = colorResource(id = R.color.tagBackground),
-                fontFamily = Ubuntu
-            )
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    "No tracks available",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = colorResource(id = R.color.tagBackground),
+                    fontFamily = Ubuntu,
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    "Start a track and save it to see it here!",
+                    textAlign = TextAlign.Center,
+                    color = colorResource(id = R.color.tagBackground),
+                    fontFamily = Ubuntu
+                )
+            }
         }
     }
 }
 
-
-// Data class representing the data for a card.
-data class CardData(
-    val imageRes: Int, // Resource ID of the image.
-    val location: String, // Location text.
-    val details: List<IconTextPair>, // List of icon-text pairs.
-    val date: String // Date text.
-)
-
-// Data class representing an icon and a text.
-data class IconTextPair(
-    val icon: ImageVector, // Icon vector.
-    val text: String // Corresponding text.
-)

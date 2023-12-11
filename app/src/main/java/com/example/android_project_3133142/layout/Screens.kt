@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DownhillSkiing
-import androidx.compose.material.icons.filled.Height
 import androidx.compose.material.icons.filled.Landscape
 import androidx.compose.material.icons.filled.Speed
 import androidx.compose.material3.MaterialTheme
@@ -28,9 +27,10 @@ import com.example.android_project_3133142.controller.displaySlopeCard
 import com.example.android_project_3133142.navigation.Destinations
 import com.example.android_project_3133142.R
 import com.example.android_project_3133142.Ubuntu
+import com.example.android_project_3133142.controller.CardData
+import com.example.android_project_3133142.controller.IconTextPair
+import com.example.android_project_3133142.controller.statistics
 import com.example.android_project_3133142.slopesArray
-
-var statistics = mutableListOf<Statistic>()
 
 // Composable function for the Home Screen.
 @Composable
@@ -162,29 +162,4 @@ fun StatisticsScreen() {
         // Displaying a view with profile statistics.
         ProfileStatisticsView(statistics)
     }
-}
-
-fun reCalcStatistic(){
-
-    var overallMaxSpeed = 0
-    var overallDistance = 0
-    var overallMaxHeight = 0
-
-    for (slope in slopesArray){
-
-        if (overallMaxHeight < slope.altitude.max)
-            overallMaxHeight = slope.altitude.max
-
-        overallDistance += slope.distance
-
-        if (overallMaxSpeed < slope.maxVelocity)
-            overallMaxSpeed = slope.maxVelocity
-
-    }
-
-    statistics = mutableListOf(
-        Statistic("Overall Max Speed", "$overallMaxSpeed km/h", Icons.Default.Speed),
-        Statistic("Overall Distance", "$overallDistance km", Icons.Default.DownhillSkiing),
-        Statistic("Overall Max Height", "$overallMaxHeight m", Icons.Default.Height)
-    )
 }

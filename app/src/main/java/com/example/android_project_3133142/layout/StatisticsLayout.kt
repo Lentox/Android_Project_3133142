@@ -17,7 +17,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -25,13 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.android_project_3133142.R
 import com.example.android_project_3133142.Ubuntu
-
-// Data class representing a statistic, consisting of a label, a value, and an icon.
-data class Statistic(
-    val label: String,
-    val value: String,
-    val icon: ImageVector
-)
+import com.example.android_project_3133142.controller.Statistic
 
 // Composable function to display a single statistic.
 @Composable

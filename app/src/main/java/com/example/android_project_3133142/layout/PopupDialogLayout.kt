@@ -35,6 +35,11 @@ import androidx.compose.ui.window.Dialog
 import com.example.android_project_3133142.R
 import com.example.android_project_3133142.Ubuntu
 import com.example.android_project_3133142.altitude
+import com.example.android_project_3133142.controller.Speed
+import com.example.android_project_3133142.controller.SpeedUnit
+import com.example.android_project_3133142.controller.UnitType
+import com.example.android_project_3133142.controller.Vertical
+import com.example.android_project_3133142.controller.VerticalUnit
 import com.example.android_project_3133142.latitude
 import com.example.android_project_3133142.longitude
 import com.example.android_project_3133142.selectedSpeedUnit
@@ -100,12 +105,10 @@ fun PopupDialogSettings(onDismiss: () -> Unit) {
                     onSpeedUnitSelected = { newSpeedUnit ->
                         selectedSpeedState = newSpeedUnit
                         selectedSpeedUnit = newSpeedUnit
-                        println(selectedSpeedUnit.unit.label)
                     },
                     onVerticalUnitSelected = { newVerticalUnit ->
                         selectedVerticalState = newVerticalUnit
                         selectedVerticalUnit = newVerticalUnit
-                        println(selectedVerticalUnit)
                     },
                 )
             }
@@ -196,20 +199,6 @@ fun UnitSwitchItem(
             fontFamily = Ubuntu
         )
     }
-}
-
-sealed class UnitType
-data class SpeedUnit(val unit: Speed) : UnitType()
-data class VerticalUnit(val unit: Vertical) : UnitType()
-
-enum class Speed(val label: String) {
-    KMH("km/h"),
-    MPH("mph")
-}
-
-enum class Vertical(val label: String) {
-    M("m"),
-    FT("ft")
 }
 
 @Composable

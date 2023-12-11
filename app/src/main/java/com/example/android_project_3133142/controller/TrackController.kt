@@ -1,14 +1,6 @@
 package com.example.android_project_3133142.controller
 
-import com.example.android_project_3133142.objects.Slope
-import com.example.android_project_3133142.currentDisplayedCard
-import com.example.android_project_3133142.isCardDisplayed
 import kotlin.math.atan
-
-fun displaySlopeCard(slope: Slope){
-    isCardDisplayed = true
-    currentDisplayedCard = slope
-}
 
 fun calculateGradient(heightDifference: Double, horizontalDistance: Double): Pair<Double, Double> {
     if (horizontalDistance == 0.0) {
@@ -25,4 +17,18 @@ fun formatElapsedTime(elapsedTime: Long): String {
     val hours = elapsedTime / (1000 * 60 * 60)
 
     return String.format("%02d:%02d:%02d", hours, minutes, seconds)
+}
+
+sealed class UnitType
+data class SpeedUnit(val unit: Speed) : UnitType()
+data class VerticalUnit(val unit: Vertical) : UnitType()
+
+enum class Speed(val label: String) {
+    KMH("km/h"),
+    MPH("mph")
+}
+
+enum class Vertical(val label: String) {
+    M("m"),
+    FT("ft")
 }
