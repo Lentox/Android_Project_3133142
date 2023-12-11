@@ -50,7 +50,7 @@ android {
 }
 
 dependencies {
-    // AndroidX und Compose
+    // AndroidX and Compose
     implementation(platform("androidx.compose:compose-bom:2023.03.00"))
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.activity:activity-compose:1.8.1")

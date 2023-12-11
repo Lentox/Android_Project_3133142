@@ -210,6 +210,7 @@ fun GridLayout() {
                         values2 = values2.toMutableList().apply {
                             set(2, "$gradientPerc%")
                         }
+                        println(gradientPerc)
                         gradient = gradientPerc
                     }
                     oldAltitude = round(altitude.toDouble()).toInt()

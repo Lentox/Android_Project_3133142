@@ -5,8 +5,16 @@ import com.example.android_project_3133142.currentDisplayedCard
 import com.example.android_project_3133142.isCardDisplayed
 import com.example.android_project_3133142.objects.Slope
 
-fun displaySlopeCard(slope: Slope){
+/**
+ * Displays a card for the given slope.
+ *
+ * @param slope The Slope object to be displayed.
+ */
+fun displaySlopeCard(slope: Slope) {
+    // Set the flag to indicate that a card is displayed.
     isCardDisplayed = true
+
+    // Set the current displayed card to the provided slope.
     currentDisplayedCard = slope
 }
 

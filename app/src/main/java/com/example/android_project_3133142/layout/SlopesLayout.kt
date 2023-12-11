@@ -56,7 +56,7 @@ fun CreateListItems(items: List<CardData>, onIconClick: (Int) -> Unit) {
     // LazyColumn creates a vertically scrollable column that only composes and lays out the currently visible items.
     LazyColumn (
         modifier = Modifier
-            .height(605.dp) // Explicit height of the LazyColumn.
+            .height(650.dp) // Explicit height of the LazyColumn.
     ){
 
         // Creates a list of items based on the 'items' list passed to the function.

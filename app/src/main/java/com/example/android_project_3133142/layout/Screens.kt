@@ -88,7 +88,7 @@ fun SlopesScreen(navController: NavHostController) {
                 painterResource(id = R.drawable.background), // Sets the background image.
                 contentScale = ContentScale.FillBounds // Scales the background image to fill the bounds.
             )
-            .wrapContentSize(Alignment.TopCenter) // Wraps the content size and aligns it at the top center.
+
     ) {
         // Displaying a text label for the slopes screen.
         Text(

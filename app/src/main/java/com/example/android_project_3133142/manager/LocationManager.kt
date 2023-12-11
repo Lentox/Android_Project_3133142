@@ -38,7 +38,7 @@ class LocationManager(private val activity: Activity) {
             
             for (location in p0.locations) {
                 // Process each location in the result.
-                println("Lat: " + location.latitude + " Long: " + location.longitude + " Alt: " + location.altitude + " Zeit: " + SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date()))
+                //println("Lat: " + location.latitude + " Long: " + location.longitude + " Alt: " + location.altitude + " Zeit: " + SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date()))
                 latitude = location.latitude.toString()
                 longitude = location.longitude.toString()
                 timestamp = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
